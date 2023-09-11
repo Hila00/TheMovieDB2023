@@ -1,0 +1,102 @@
+[
+  {
+    "adult": false,
+    "backdrop_path": "/oqP1qEZccq5AD9TVTIaO6IGUj7o.jpg",
+    "genre_ids": [
+      14,
+      28,
+      12
+    ],
+    "id": 455476,
+    "original_language": "en",
+    "original_title": "Knights of the Zodiac",
+    "overview": "When a headstrong street orphan, Seiya, in search of his abducted sister unwittingly taps into hidden powers, he discovers he might be the only person alive who can protect a reincarnated goddess, sent to watch over humanity. Can he let his past go and embrace his destiny to become a Knight of the Zodiac?",
+    "popularity": 3963.447,
+    "poster_path": "/qW4crfED8mpNDadSmMdi7ZDzhXF.jpg",
+    "release_date": "2023-04-27",
+    "title": "Knights of the Zodiac",
+    "video": false,
+    "vote_average": 6.5,
+    "vote_count": 367
+  },
+  {
+    "adult": false,
+    "backdrop_path": "/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
+    "genre_ids": [
+      28,
+      80,
+      53
+    ],
+    "id": 385687,
+    "original_language": "en",
+    "original_title": "Fast X",
+    "overview": "Over many missions and against impossible odds, Dom Toretto and his family have outsmarted, out-nerved and outdriven every foe in their path. Now, they confront the most lethal opponent they've ever faced: A terrifying threat emerging from the shadows of the past who's fueled by blood revenge, and who is determined to shatter this family and destroy everything—and everyone—that Dom loves, forever.",
+    "popularity": 3705.176,
+    "poster_path": "/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
+    "release_date": "2023-05-17",
+    "title": "Fast X",
+    "video": false,
+    "vote_average": 7.4,
+    "vote_count": 2508
+  },
+  {
+    "adult": false,
+    "backdrop_path": "/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg",
+    "genre_ids": [
+      878,
+      12,
+      28
+    ],
+    "id": 447365,
+    "original_language": "en",
+    "original_title": "Guardians of the Galaxy Vol. 3",
+    "overview": "Peter Quill, still reeling from the loss of Gamora, must rally his team around him to defend the universe along with protecting one of their own. A mission that, if not completed successfully, could quite possibly lead to the end of the Guardians as we know them.",
+    "popularity": 3135.553,
+    "poster_path": "/r2J02Z2OpNTctfOSN1Ydgii51I3.jpg",
+    "release_date": "2023-05-03",
+    "title": "Guardians of the Galaxy Vol. 3",
+    "video": false,
+    "vote_average": 8.1,
+    "vote_count": 2586
+  },
+  {
+    "adult": false,
+    "backdrop_path": "/zcySy6dnSmyqiichtDgO7AEeZoq.jpg",
+    "genre_ids": [
+      28,
+      18,
+      53
+    ],
+    "id": 254128,
+    "original_language": "en",
+    "original_title": "San Andreas",
+    "overview": "In the aftermath of a massive earthquake in California, a rescue-chopper pilot makes a dangerous journey across the state in order to rescue his estranged daughter.",
+    "popularity": 2498.482,
+    "poster_path": "/2Gfjn962aaFSD6eST6QU3oLDZTo.jpg",
+    "release_date": "2015-05-27",
+    "title": "San Andreas",
+    "video": false,
+    "vote_average": 6.2,
+    "vote_count": 7737
+  },
+  {
+    "adult": false,
+    "backdrop_path": "/rPBeEi1tU8IhQ9rbdnlLU0d0NR.jpg",
+    "genre_ids": [
+      28,
+      12,
+      18
+    ],
+    "id": 445651,
+    "original_language": "en",
+    "original_title": "The Darkest Minds",
+    "overview": "After a disease kills 98% of America's children, the surviving 2% develop superpowers and are placed in internment camps. A 16-year-old girl escapes her camp and joins a group of other teens on the run from the government.",
+    "popularity": 2158.368,
+    "poster_path": "/94RaS52zmsqaiAe1TG20pdbJCZr.jpg",
+    "release_date": "2018-07-25",
+    "title": "The Darkest Minds",
+    "video": false,
+    "vote_average": 7,
+    "vote_count": 2454
+  }
+]
