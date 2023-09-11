@@ -1,6 +1,5 @@
 # the_movie_db_module2_part1
 
-Module 2 app
 [main.dart](lib%2Fmain.dart)
 ## Getting Started
 

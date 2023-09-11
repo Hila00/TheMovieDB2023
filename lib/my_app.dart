@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'pages/home_screen/app_home_screen.dart';
 import 'constants.dart';
-import 'my_home_page.dart';
+import 'pages/movie_info_screen/app_movie_info.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  static const String initialRoute = '/';
+  static const String movieInfoRoute = '/movie';
+
+  const MyApp({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,11 @@ class MyApp extends StatelessWidget {
           AppConstants.appBackgroundColor,
         ),
       ),
-      home: const MyHomePage(),
+      initialRoute: initialRoute,
+      routes: {
+        initialRoute: (context) => const AppHomeScreen(),
+        movieInfoRoute: (context) => const AppMovieInfo(),
+      },
     );
   }
 }
