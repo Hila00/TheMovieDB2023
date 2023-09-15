@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'pages/home_screen/app_home_screen.dart';
-import 'constants.dart';
-import 'pages/movie_info_screen/app_movie_info.dart';
+import 'src/presentation/view/app_home_screen.dart';
+import 'src/core/util/constants.dart';
+import 'src/presentation/view/app_movie_info_screen.dart';
 
 class MyApp extends StatelessWidget {
   static const String initialRoute = '/';
