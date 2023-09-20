@@ -7,6 +7,7 @@ class MovieDetails extends StatelessWidget {
   String movieReleaseDate;
   num movieVoteAverage;
   static const String releaseDateText = 'Release date: ';
+  static const String movieTitleKey = 'MovieTitleKey';
   static const double movieTitleSize = 36;
   static const double movieReleaseDateSize = 18;
   static const double movieVoteAverageSize = 25;
@@ -27,6 +28,7 @@ class MovieDetails extends StatelessWidget {
         CustomText(
           text: movieTitle,
           fontSize: movieTitleSize,
+          key: const Key(movieTitleKey),
         ),
         Row(
           children: [

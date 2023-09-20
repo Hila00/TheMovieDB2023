@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'src/presentation/view/app_home_screen.dart';
+import 'src/config/route/app_routes.dart';
 import 'src/core/util/constants.dart';
-import 'src/presentation/view/app_movie_info_screen.dart';
+import 'src/presentation/view/app_home_screen.dart';
+import 'src/presentation/view/app_trailers_screen.dart';
 
 class MyApp extends StatelessWidget {
-  static const String initialRoute = '/';
-  static const String movieInfoRoute = '/movie';
-
   const MyApp({
     super.key,
   });
@@ -26,10 +24,10 @@ class MyApp extends StatelessWidget {
           AppConstants.appBackgroundColor,
         ),
       ),
-      initialRoute: initialRoute,
+      initialRoute: AppRoutes.homeScreenRoute,
       routes: {
-        initialRoute: (context) => const AppHomeScreen(),
-        movieInfoRoute: (context) => const AppMovieInfo(),
+        AppRoutes.homeScreenRoute: (context) => HomeScreen(),
+        AppRoutes.trailersRoute: (context) => AppTrailersScreen(),
       },
     );
   }

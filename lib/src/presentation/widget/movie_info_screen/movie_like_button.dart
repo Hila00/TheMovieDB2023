@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MovieLikeButton extends StatefulWidget {
+  final Key _likeButtonKey = const Key('LikeButtonKey');
+
   const MovieLikeButton({
     super.key,
   });
@@ -17,8 +19,7 @@ class _MovieLikeButtonState extends State<MovieLikeButton> {
     if (isLikeTapped) {
       isLikeTapped = false;
       likesAmount--;
-    }
-    else {
+    } else {
       isLikeTapped = true;
       likesAmount++;
     }
@@ -29,6 +30,7 @@ class _MovieLikeButtonState extends State<MovieLikeButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
+      key: widget._likeButtonKey,
       onPressed: () {
         toggleLike();
       },

@@ -21,16 +21,21 @@ class AppHeader extends StatelessWidget {
       padding: const EdgeInsets.all(
         containerPadding,
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(
-            menuIcon,
-            color: Color(
-              AppConstants.appFontColor,
+          GestureDetector(
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+            },
+            child: const Icon(
+              menuIcon,
+              color: Color(
+                AppConstants.appFontColor,
+              ),
+              size: menuIconSize,
             ),
-            size: menuIconSize,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(
               left: titleLeftPadding,
             ),

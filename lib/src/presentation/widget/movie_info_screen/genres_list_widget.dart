@@ -1,37 +1,48 @@
 import 'package:flutter/material.dart';
-import '../../../domain/repository/i_repository.dart';
+import '../../../domain/entity/app_event.dart';
+import '../../bloc/genres_bloc.dart';
+import '../app_circular_progress_indicator.dart';
 import '../custom_text_widget.dart';
 import '../../../domain/entity/genre.dart';
-import '../../../data/repository/genre_repository_impl.dart';
 import '../../../core/util/constants.dart';
 
-class GenresList extends StatelessWidget {
+class GenresList extends StatefulWidget {
   static const double containerBorderRadius = 15;
   static const double containerPadding = 5;
   static const double containerMargin = 6;
   static const double itemsFontSize = 15;
+  static const String errorMessage = 'Error: failed to load genres';
   final List<num> genresIds;
-  IRepository<List<Genre>> genreRepository = GenreRepositoryImpl();
+  final GenresBloc bloc;
 
-  GenresList({
+  const GenresList({
+    required this.bloc,
     required this.genresIds,
     super.key,
   });
 
   @override
+  State<GenresList> createState() => _GenresListState();
+}
+
+class _GenresListState extends State<GenresList> {
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: genreRepository.getData(),
+    return StreamBuilder(
+      stream: widget.bloc.allGenres,
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<Genre>> data,
+        AsyncSnapshot<AppEvent> snapshot,
       ) {
-        if (data.hasError) {
-          return Text('${data.error}');
-        } else if (data.hasData) {
-          List<Genre> genres = data.data as List<Genre>;
+        if (snapshot.data == null) {
+          widget.bloc.fetchAllGenres();
+        }
+
+        if (snapshot.data?.status == Status.success) {
+          AppEvent? dataSuccess = snapshot.data;
+          List<Genre> genres = dataSuccess?.data;
           List<String> movieRelatedGenres =
-              GenreRepositoryImpl().getRelatedGenres(genres, genresIds);
+              widget.bloc.getRelatedGenres(genres, widget.genresIds);
 
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -44,26 +55,33 @@ class GenresList extends StatelessWidget {
                         AppConstants.appItemsBackgroundColor,
                       ),
                       borderRadius: BorderRadius.circular(
-                        containerBorderRadius,
+                        GenresList.containerBorderRadius,
                       ),
                     ),
                     padding: const EdgeInsets.all(
-                      containerPadding,
+                      GenresList.containerPadding,
                     ),
                     margin: const EdgeInsets.all(
-                      containerMargin,
+                      GenresList.containerMargin,
                     ),
                     child: CustomText(
                       text: genre,
-                      fontSize: itemsFontSize,
+                      fontSize: GenresList.itemsFontSize,
                     ),
                   ),
               ],
             ),
           );
+        } else if (snapshot.data?.status == Status.error ||
+            snapshot.data?.status == Status.empty) {
+          return const Center(
+            child: CustomText(
+              text: GenresList.errorMessage,
+            ),
+          );
         } else {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         }
       },
