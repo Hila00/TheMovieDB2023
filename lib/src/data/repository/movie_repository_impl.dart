@@ -1,13 +1,35 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import '../../core/util/api_constants.dart';
+import '../../core/util/data_state.dart';
 import '../../domain/repository/i_repository.dart';
 import '../../domain/entity/movie.dart';
+import '../datasource/remote/i_api_service.dart';
+import '../model/movie_model.dart';
 
-class MovieRepositoryImpl implements IRepository<List<Movie>> {
+class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
+  IApiService movieService;
+
+  MovieRepositoryImpl({
+    required this.movieService,
+  });
+
   @override
-  Future<List<Movie>> getData() async {
-    final jsonData = await rootBundle.loadString('assets/jsonfile/movies.json');
-    final list = json.decode(jsonData) as List<dynamic>;
-    return list.map((item) => Movie.fromJson(item)).toList();
+  Future<DataState<List<Movie>>> getData() async {
+    DataState dataState = await movieService.fetchDataFromApi();
+
+    if (dataState is DataSuccess) {
+      List<MovieModel> movieModel = dataState.data;
+
+      if (movieModel.isNotEmpty) {
+        return DataSuccess<List<Movie>>(movieModel);
+      } else {
+        return DataError(
+          Exception(ApiConstants.errorMessage),
+        );
+      }
+    } else {
+      return DataError(
+        Exception(ApiConstants.errorMessage),
+      );
+    }
   }
 }

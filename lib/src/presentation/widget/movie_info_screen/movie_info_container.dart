@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/util/constants.dart';
 import 'movie_details.dart';
-import '../movie_poster.dart';
+import 'movie_poster.dart';
 import 'movie_like_button.dart';
 
 class MovieInfoContainer extends StatelessWidget {

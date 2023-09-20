@@ -1,65 +1,82 @@
 import 'package:flutter/material.dart';
-import '../../../domain/repository/i_repository.dart';
-import '../custom_text_widget.dart';
-import '../../view/app_movie_info_screen.dart';
-import 'movie_list_card.dart';
-import '../../../data/repository/movie_repository_impl.dart';
+import '../../../core/bloc/i_movies_bloc.dart';
+import '../../../core/util/constants.dart';
+import '../../../core/util/error_message_widget.dart';
+import '../../../domain/entity/app_event.dart';
 import '../../../domain/entity/movie.dart';
+import '../../view/app_movie_info_screen.dart';
+import '../app_circular_progress_indicator.dart';
+import 'movie_card.dart';
 
-class MovieListScreen extends StatefulWidget {
-  const MovieListScreen({
+class MovieListWidget extends StatelessWidget {
+  static const double containerHeightDefaultValue = 300;
+  static const double containerPadding = 10;
+  static const int gridViewCrossAxisCount = 1;
+  final double containerHeight;
+  IMoviesBloc moviesBloc;
+  Stream<AppEvent> moviesStream;
+
+  MovieListWidget({
+    this.containerHeight = containerHeightDefaultValue,
+    required this.moviesBloc,
+    required this.moviesStream,
     super.key,
   });
 
   @override
-  State<MovieListScreen> createState() => _MovieListScreenState();
-}
-
-class _MovieListScreenState extends State<MovieListScreen> {
-  IRepository<List<Movie>> movieRepository = MovieRepositoryImpl();
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: movieRepository.getData(),
+    return StreamBuilder(
+      stream: moviesStream,
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<Movie>> data,
+        AsyncSnapshot<AppEvent> snapshot,
       ) {
-        if (data.hasError) {
-          return CustomText(
-            text: '${data.error}',
-          );
-        } else if (data.hasData) {
-          List<Movie> movies = data.data as List<Movie>;
-          return ListView.builder(
-            itemCount: movies.length,
-            itemBuilder: (
-              BuildContext context,
-              int index,
-            ) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AppMovieInfo(),
-                      settings: RouteSettings(
-                        arguments: movies[index],
+        if (snapshot.data == null) {
+          moviesBloc.fetchTopRatedMovies();
+          moviesBloc.fetchPopularMovies();
+          moviesBloc.fetchNowPlayingMovies();
+        }
+
+        if (snapshot.data?.status == Status.success) {
+          List<Movie> movies = snapshot.data?.data;
+
+          return Container(
+            height: containerHeight,
+            color: const Color(AppConstants.appItemsBackgroundColor),
+            padding: const EdgeInsets.all(containerPadding),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: gridViewCrossAxisCount,
+              ),
+              itemCount: movies.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (
+                BuildContext context,
+                int index,
+              ) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => AppMovieInfo(
+                          movie: movies[index],
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: MovieListCard(
-                  movie: movies[index],
-                ),
-              );
-            },
+                    );
+                  },
+                  child: MovieCard(
+                    moviePosterUrl: movies[index].posterUrl,
+                  ),
+                );
+              },
+            ),
           );
+        } else if (snapshot.data?.status == Status.error ||
+            snapshot.data?.status == Status.empty) {
+          return const ErrorMessage();
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const CustomCircularProgressIndicator();
         }
       },
     );

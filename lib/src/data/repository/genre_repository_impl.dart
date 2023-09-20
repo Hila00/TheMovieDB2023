@@ -1,39 +1,35 @@
-import 'dart:convert';
 import 'dart:core';
-import 'package:flutter/services.dart';
+import '../../core/util/api_constants.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_repository.dart';
+import '../datasource/remote/i_api_service.dart';
+import '../../core/util/data_state.dart';
+import '../model/genre_model.dart';
 
-class GenreRepositoryImpl implements IRepository<List<Genre>> {
+class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
+  IApiService genresService;
+
+  GenreRepositoryImpl({
+    required this.genresService,
+  });
+
   @override
-  Future<List<Genre>> getData() async {
-    String jsonString =
-        await rootBundle.loadString('assets/jsonfile/genres.json');
-    Map<String, dynamic> jsonData = jsonDecode(jsonString);
-    List<Genre> genresList = [];
+  Future<DataState<List<Genre>>> getData() async {
+    DataState dataState = await genresService.fetchDataFromApi();
+    if (dataState is DataSuccess) {
+      List<GenreModel> genreModel = dataState.data;
 
-    for (var genre in jsonData['genres']) {
-      genresList.add(
-        Genre(
-          id: genre['id'],
-          name: genre['name'],
-        ),
+      if (genreModel.isNotEmpty) {
+        return DataSuccess<List<Genre>>(genreModel);
+      } else {
+        return DataError(
+          Exception(ApiConstants.errorMessage),
+        );
+      }
+    } else {
+      return DataError(
+        Exception(dataState.error),
       );
     }
-
-    return genresList;
-  }
-
-  List<String> getRelatedGenres(
-    List<Genre> genres,
-    List<num> movieGenresIds,
-  ) {
-    List<String> movieRelatedGenres = [];
-    movieRelatedGenres = genres
-        .where((genre) => movieGenresIds.contains(genre.id))
-        .map((genre) => genre.name)
-        .toList();
-
-    return movieRelatedGenres;
   }
 }

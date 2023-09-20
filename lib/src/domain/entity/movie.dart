@@ -1,4 +1,4 @@
-import '../../core/util/constants.dart';
+import '../../core/util/api_constants.dart';
 
 class Movie {
   bool adult;
@@ -53,7 +53,7 @@ class Movie {
     );
   }
 
-  String get backdropUrl => '${AppConstants.apiImagesPath}$backdropPath';
+  String get backdropUrl => '${ApiConstants.baseUrlForImages}$backdropPath';
 
-  String get posterUrl => '${AppConstants.apiImagesPath}$posterPath';
+  String get posterUrl => '${ApiConstants.baseUrlForImages}$posterPath';
 }

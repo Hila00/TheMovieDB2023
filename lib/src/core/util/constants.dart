@@ -5,5 +5,6 @@ class AppConstants {
   static const int appAccentColor = 0xff8899A6;
   static const int starColor = 0xfff7d001;
   static const String appTitle = 'The Movie DB';
-  static const String apiImagesPath = 'https://image.tmdb.org/t/p/original/';
+  static const String errorMessage =
+      'Try later, an error has occurred. Check your internet connection';
 }
