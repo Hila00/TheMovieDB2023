@@ -2,6 +2,7 @@ import 'dart:core';
 import '../../core/util/api_constants.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_repository.dart';
+import '../datasource/local/movie_database.dart';
 import '../datasource/remote/i_api_service.dart';
 import '../../core/util/data_state.dart';
 import '../model/genre_model.dart';
@@ -15,11 +16,17 @@ class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
 
   @override
   Future<DataState<List<Genre>>> getData() async {
+    final database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     DataState dataState = await genresService.fetchDataFromApi();
     if (dataState is DataSuccess) {
       List<GenreModel> genreModel = dataState.data;
 
       if (genreModel.isNotEmpty) {
+        final genreDao = database.genreDao;
+        for (GenreModel genre in genreModel) {
+          genreDao.insertGenre(genre);
+        }
         return DataSuccess<List<Genre>>(genreModel);
       } else {
         return DataError(
@@ -27,9 +34,16 @@ class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
         );
       }
     } else {
-      return DataError(
-        Exception(dataState.error),
-      );
+      final genreDao = database.genreDao;
+      List<Genre> genresFromDB = await genreDao.getAllGenres();
+
+      if (genresFromDB.isNotEmpty) {
+        return DataSuccess(genresFromDB);
+      } else {
+        return DataError(
+          Exception(dataState.error),
+        );
+      }
     }
   }
 }

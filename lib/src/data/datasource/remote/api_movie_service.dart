@@ -23,6 +23,7 @@ class ApiMovieService extends IApiService {
           HttpHeaders.authorizationHeader: ApiConstants.apiBearerToken,
         },
       );
+
       if (response.statusCode == HttpStatus.ok) {
         Map<String, dynamic> json = jsonDecode(response.body);
         return DataSuccess(

@@ -11,11 +11,11 @@ class TrailerCard extends StatelessWidget {
   static const double generalContainerMarginTop = 10;
   static const double movieTitleFontSize = 20;
   static const double sizedBoxHeight = 10;
-  static const double movieImageHeight = 400;
+  static const double movieImageHeight = 300;
   static const double movieImageBlurSigmaX = 1.7;
   static const double movieImageBlurSigmaY = 2;
   static const double playIconSize = 100;
-  static const double playIconHeightFactor = 4.5;
+  static const double playIconHeightFactor = 2.9;
   final Movie movie;
 
   const TrailerCard({
@@ -57,7 +57,7 @@ class TrailerCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: movie.posterUrl,
                     height: movieImageHeight,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                     placeholder: (
                       BuildContext context,
                       String url,

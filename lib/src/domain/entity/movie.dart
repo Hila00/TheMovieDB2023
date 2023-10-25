@@ -1,20 +1,24 @@
+import 'package:floor/floor.dart';
+
 import '../../core/util/api_constants.dart';
 
+@entity
 class Movie {
+  @primaryKey
+  int id;
   bool adult;
   String backdropPath;
-  List<num> genreIds;
-  num id;
+  List<int> genreIds;
   String originalLanguage;
   String originalTitle;
   String overview;
-  num popularity;
+  double popularity;
   String posterPath;
   String releaseDate;
   String title;
   bool video;
-  num voteAverage;
-  num voteCount;
+  double voteAverage;
+  int voteCount;
 
   Movie({
     required this.adult,
@@ -38,7 +42,7 @@ class Movie {
     return Movie(
       adult: json['adult'],
       backdropPath: json['backdrop_path'],
-      genreIds: json['genre_ids'].cast<num>(),
+      genreIds: json['genre_ids'].cast<int>(),
       id: json['id'],
       originalLanguage: json['original_language'],
       originalTitle: json['original_title'],

@@ -116,7 +116,7 @@ void main() async {
       test(
         'Genres BLoC converting genresIds list on relatedGenresList,',
         () async {
-          List<num> genresIds = [
+          List<int> genresIds = [
             28, //Action
             12, //Adventure
           ];

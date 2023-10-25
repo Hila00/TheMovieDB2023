@@ -46,7 +46,7 @@ class GenresBloc extends IBloc {
 
   List<String> getRelatedGenres(
     List<Genre> genres,
-    List<num> movieGenresIds,
+    List<int> movieGenresIds,
   ) {
     List<String> movieRelatedGenres = [];
     movieRelatedGenres = genres

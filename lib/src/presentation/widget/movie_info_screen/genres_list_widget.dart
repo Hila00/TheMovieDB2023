@@ -12,7 +12,7 @@ class GenresList extends StatefulWidget {
   static const double containerMargin = 6;
   static const double itemsFontSize = 15;
   static const String errorMessage = 'Error: failed to load genres';
-  final List<num> genresIds;
+  final List<int> genresIds;
   final GenresBloc bloc;
 
   const GenresList({

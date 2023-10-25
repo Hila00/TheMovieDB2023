@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../core/util/constants.dart';
 import '../app_circular_progress_indicator.dart';
 
 class MovieCard extends StatelessWidget {
@@ -32,6 +33,7 @@ class MovieCard extends StatelessWidget {
       ) =>
           const Icon(
         Icons.error,
+        color: Color(AppConstants.appFontColor),
       ),
     );
   }
