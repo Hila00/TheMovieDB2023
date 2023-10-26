@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/util/api_constants.dart';
+import 'package:provider/provider.dart';
 import '../../core/util/categories.dart';
-import '../../data/datasource/remote/api_movie_service.dart';
-import '../../data/repository/movie_repository_impl.dart';
-import '../../domain/usecase/implementation/movies_use_case.dart';
 import '../bloc/movies_bloc.dart';
 import '../widget/app_drawer.dart';
 import '../widget/app_header.dart';
@@ -17,28 +14,7 @@ class HomeScreen extends StatefulWidget {
   static const double outstandingListHeight = 450;
   static const double errorMessageFontSize = 20;
 
-  final MoviesBloc bloc = MoviesBloc(
-    popularMoviesUseCase: MoviesUseCase(
-      movieRepository: MovieRepositoryImpl(
-        movieService:
-            ApiMovieService(endPoint: ApiConstants.popularMoviesEndPoint),
-      ),
-    ),
-    topRatedMoviesUseCase: MoviesUseCase(
-      movieRepository: MovieRepositoryImpl(
-        movieService:
-            ApiMovieService(endPoint: ApiConstants.topRatedMoviesEndPoint),
-      ),
-    ),
-    nowPlayingMoviesUseCase: MoviesUseCase(
-      movieRepository: MovieRepositoryImpl(
-        movieService:
-            ApiMovieService(endPoint: ApiConstants.nowPlayingMoviesEndPoint),
-      ),
-    ),
-  );
-
-  HomeScreen({
+  const HomeScreen({
     super.key,
   });
 
@@ -50,19 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    widget.bloc.fetchNowPlayingMovies();
-    widget.bloc.fetchPopularMovies();
-    widget.bloc.fetchTopRatedMovies();
   }
 
   @override
   void dispose() {
-    widget.bloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    MoviesBloc bloc = Provider.of<MoviesBloc>(context);
+
     return Scaffold(
       drawer: const AppDrawer(),
       body: SafeArea(
@@ -75,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const CategoryTitle(title: Categories.topRated),
                   MovieListWidget(
-                    moviesStream: widget.bloc.allTopRatedMovies,
-                    moviesBloc: widget.bloc,
+                    moviesStream: bloc.allTopRatedMovies,
+                    moviesBloc: bloc,
                   ),
                   const SizedBox(
                     height: HomeScreen.sizedBoxSize,
@@ -85,16 +59,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Categories.popular,
                   ),
                   MovieListWidget(
-                    moviesStream: widget.bloc.allPopularMovies,
-                    moviesBloc: widget.bloc,
+                    moviesStream: bloc.allPopularMovies,
+                    moviesBloc: bloc,
                     containerHeight: HomeScreen.outstandingListHeight,
                   ),
                   const CategoryTitle(
                     title: Categories.nowPlaying,
                   ),
                   MovieListWidget(
-                    moviesStream: widget.bloc.allNowPlayingMovies,
-                    moviesBloc: widget.bloc,
+                    moviesStream: bloc.allNowPlayingMovies,
+                    moviesBloc: bloc,
                   ),
                 ],
               ),

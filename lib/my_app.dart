@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'src/core/util/bloc_singleton_dependencies.dart';
 import 'src/config/route/app_routes.dart';
 import 'src/core/util/constants.dart';
 import 'src/presentation/view/app_home_screen.dart';
 import 'src/presentation/view/app_trailers_screen.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -26,8 +28,14 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.homeScreenRoute,
       routes: {
-        AppRoutes.homeScreenRoute: (context) => HomeScreen(),
-        AppRoutes.trailersRoute: (context) => AppTrailersScreen(),
+        AppRoutes.homeScreenRoute: (context) => Provider(
+              create: (_) => BlocSingletonDependencies.moviesBloc,
+              child: const HomeScreen(),
+            ),
+        AppRoutes.trailersRoute: (context) => Provider(
+              create: (_) => BlocSingletonDependencies.trailersBloc,
+              child: const AppTrailersScreen(),
+            ),
       },
     );
   }

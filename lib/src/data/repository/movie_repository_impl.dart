@@ -2,6 +2,7 @@ import '../../core/util/api_constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/repository/i_repository.dart';
 import '../../domain/entity/movie.dart';
+import '../datasource/local/DAOs/movie_dao.dart';
 import '../datasource/local/movie_database.dart';
 import '../datasource/remote/i_api_service.dart';
 import '../model/movie_model.dart';
@@ -15,7 +16,7 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
 
   @override
   Future<DataState<List<Movie>>> getData() async {
-    final database =
+    AppDatabase database =
         await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     DataState dataState = await movieService.fetchDataFromApi();
 
@@ -23,7 +24,7 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
       List<MovieModel> movieModel = dataState.data;
 
       if (movieModel.isNotEmpty) {
-        final movieDao = database.movieDao;
+        MovieDao movieDao = database.movieDao;
         for (MovieModel movie in movieModel) {
           movieDao.insertMovie(movie);
         }

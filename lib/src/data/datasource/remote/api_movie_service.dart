@@ -8,7 +8,7 @@ import '../../model/movie_model.dart';
 import 'i_api_service.dart';
 
 class ApiMovieService extends IApiService {
-  final String endPoint;
+  String endPoint;
 
   ApiMovieService({
     required this.endPoint,
