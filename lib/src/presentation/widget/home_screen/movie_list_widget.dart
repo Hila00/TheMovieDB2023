@@ -16,13 +16,13 @@ class MovieListWidget extends StatelessWidget {
   final double containerHeight;
   IMoviesBloc moviesBloc;
   Stream<AppEvent> moviesStream;
-  final String type;
+  String? type;
 
   MovieListWidget({
     this.containerHeight = containerHeightDefaultValue,
+    this.type,
     required this.moviesBloc,
     required this.moviesStream,
-    required this.type,
     super.key,
   });
 
@@ -31,20 +31,26 @@ class MovieListWidget extends StatelessWidget {
     return StreamBuilder(
       stream: moviesStream,
       builder: (
-          BuildContext context,
-          AsyncSnapshot<AppEvent> snapshot,
-          ) {
+        BuildContext context,
+        AsyncSnapshot<AppEvent> snapshot,
+      ) {
         if (snapshot.data == null) {
-          switch(type){
-            case Categories.topRated: {
-              moviesBloc.fetchTopRatedMovies();
-            }
-            case Categories.nowPlaying: {
-              moviesBloc.fetchNowPlayingMovies();
-            }
-            case Categories.popular: {
-              moviesBloc.fetchPopularMovies();
-            }
+          switch (type) {
+            case Categories.topRated:
+              {
+                moviesBloc.fetchTopRatedMovies();
+                break;
+              }
+            case Categories.nowPlaying:
+              {
+                moviesBloc.fetchNowPlayingMovies();
+                break;
+              }
+            case Categories.popular:
+              {
+                moviesBloc.fetchPopularMovies();
+                break;
+              }
           }
         }
 
