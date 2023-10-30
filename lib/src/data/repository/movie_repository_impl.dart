@@ -25,9 +25,7 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
 
       if (movieModel.isNotEmpty) {
         MovieDao movieDao = database.movieDao;
-        for (MovieModel movie in movieModel) {
-          movieDao.insertMovie(movie);
-        }
+        movieModel.map((movie) => movieDao.insertMovie(movie));
         return DataSuccess<List<Movie>>(movieModel);
       } else {
         return DataError(

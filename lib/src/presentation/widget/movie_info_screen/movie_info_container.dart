@@ -8,7 +8,7 @@ class MovieInfoContainer extends StatelessWidget {
   final String title;
   final String posterUrl;
   final String releaseDate;
-  final num voteAverage;
+  final double voteAverage;
   static const double containerBorderRadius = 10;
   static const double containerBorderWidth = 5;
   static const double containerMargin = 5;

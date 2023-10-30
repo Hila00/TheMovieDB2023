@@ -5,7 +5,7 @@ import '../../../core/util/constants.dart';
 class MovieDetails extends StatelessWidget {
   String movieTitle;
   String movieReleaseDate;
-  num movieVoteAverage;
+  double movieVoteAverage;
   static const String releaseDateText = 'Release date: ';
   static const String movieTitleKey = 'MovieTitleKey';
   static const double movieTitleSize = 36;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/bloc/i_movies_bloc.dart';
+import '../../../core/util/categories.dart';
 import '../../../core/util/constants.dart';
 import '../../../core/util/error_message_widget.dart';
 import '../../../domain/entity/app_event.dart';
@@ -15,11 +16,13 @@ class MovieListWidget extends StatelessWidget {
   final double containerHeight;
   IMoviesBloc moviesBloc;
   Stream<AppEvent> moviesStream;
+  final String type;
 
   MovieListWidget({
     this.containerHeight = containerHeightDefaultValue,
     required this.moviesBloc,
     required this.moviesStream,
+    required this.type,
     super.key,
   });
 
@@ -28,13 +31,21 @@ class MovieListWidget extends StatelessWidget {
     return StreamBuilder(
       stream: moviesStream,
       builder: (
-        BuildContext context,
-        AsyncSnapshot<AppEvent> snapshot,
-      ) {
+          BuildContext context,
+          AsyncSnapshot<AppEvent> snapshot,
+          ) {
         if (snapshot.data == null) {
-          moviesBloc.fetchTopRatedMovies();
-          moviesBloc.fetchPopularMovies();
-          moviesBloc.fetchNowPlayingMovies();
+          switch(type){
+            case Categories.topRated: {
+              moviesBloc.fetchTopRatedMovies();
+            }
+            case Categories.nowPlaying: {
+              moviesBloc.fetchNowPlayingMovies();
+            }
+            case Categories.popular: {
+              moviesBloc.fetchPopularMovies();
+            }
+          }
         }
 
         if (snapshot.data?.status == Status.success) {

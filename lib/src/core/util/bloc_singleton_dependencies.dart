@@ -38,7 +38,7 @@ class BlocSingletonDependencies {
     useCase: MoviesUseCase(
       movieRepository: MovieRepositoryImpl(
         movieService: ApiMovieService(
-          endPoint: ApiConstants.nowPlayingMoviesEndPoint,
+          endPoint: ApiConstants.upComingMoviesEndPoint,
         ),
       ),
     ),

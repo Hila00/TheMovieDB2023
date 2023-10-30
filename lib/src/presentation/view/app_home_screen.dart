@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MovieListWidget(
                     moviesStream: bloc.allTopRatedMovies,
                     moviesBloc: bloc,
+                    type: Categories.topRated,
                   ),
                   const SizedBox(
                     height: HomeScreen.sizedBoxSize,
@@ -61,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MovieListWidget(
                     moviesStream: bloc.allPopularMovies,
                     moviesBloc: bloc,
+                    type: Categories.popular,
                     containerHeight: HomeScreen.outstandingListHeight,
                   ),
                   const CategoryTitle(
@@ -68,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   MovieListWidget(
                     moviesStream: bloc.allNowPlayingMovies,
+                    type: Categories.nowPlaying,
                     moviesBloc: bloc,
                   ),
                 ],

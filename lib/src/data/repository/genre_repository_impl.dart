@@ -2,6 +2,7 @@ import 'dart:core';
 import '../../core/util/api_constants.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_repository.dart';
+import '../datasource/local/DAOs/genre_dao.dart';
 import '../datasource/local/movie_database.dart';
 import '../datasource/remote/i_api_service.dart';
 import '../../core/util/data_state.dart';
@@ -16,17 +17,15 @@ class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
 
   @override
   Future<DataState<List<Genre>>> getData() async {
-    final database =
+    AppDatabase database =
         await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     DataState dataState = await genresService.fetchDataFromApi();
     if (dataState is DataSuccess) {
       List<GenreModel> genreModel = dataState.data;
 
       if (genreModel.isNotEmpty) {
-        final genreDao = database.genreDao;
-        for (GenreModel genre in genreModel) {
-          genreDao.insertGenre(genre);
-        }
+        GenreDao genreDao = database.genreDao;
+        genreModel.map((genre) => genreDao.insertGenre(genre));
         return DataSuccess<List<Genre>>(genreModel);
       } else {
         return DataError(
