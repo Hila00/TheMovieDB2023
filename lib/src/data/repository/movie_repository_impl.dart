@@ -1,4 +1,5 @@
 import '../../core/util/api_constants.dart';
+import '../../core/util/constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/repository/i_repository.dart';
 import '../../domain/entity/movie.dart';
@@ -9,15 +10,16 @@ import '../model/movie_model.dart';
 
 class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
   IApiService movieService;
+  Future<AppDatabase> databaseInstance;
 
   MovieRepositoryImpl({
     required this.movieService,
+    required this.databaseInstance,
   });
 
   @override
   Future<DataState<List<Movie>>> getData() async {
-    AppDatabase database =
-        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    AppDatabase database = await databaseInstance;
     DataState dataState = await movieService.fetchDataFromApi();
 
     if (dataState is DataSuccess) {
@@ -28,20 +30,26 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
         movieModel.map((movie) => movieDao.insertMovie(movie));
         return DataSuccess<List<Movie>>(movieModel);
       } else {
-        return DataError(
-          Exception(ApiConstants.errorMessage),
-        );
+        return getDatabaseState();
       }
     } else {
-      final movieDao = database.movieDao;
-      List<Movie> moviesFromDB = await movieDao.getAllMovies();
-      if (moviesFromDB.isNotEmpty) {
-        return DataSuccess(moviesFromDB);
-      } else {
-        return DataError(
-          Exception(ApiConstants.errorMessage),
-        );
-      }
+      return getDatabaseState();
+    }
+  }
+
+  Future<DataState<List<Movie>>> getDatabaseState() async {
+    AppDatabase database = await databaseInstance;
+    MovieDao dao = database.movieDao;
+    List<Movie> moviesFromDb = await dao.getAllMovies();
+
+    if (moviesFromDb.isNotEmpty) {
+      return DataSuccess(
+        moviesFromDb,
+      );
+    } else {
+      return DataError(
+        Exception(AppConstants.databaseError),
+      );
     }
   }
 }

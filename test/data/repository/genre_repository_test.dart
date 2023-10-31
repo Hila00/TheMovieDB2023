@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
+import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_service.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
@@ -13,11 +14,17 @@ class MockApiGenresService extends Mock implements IApiService {}
 void main() {
   late GenreRepositoryImpl genreRepo;
   late MockApiGenresService mockedService;
+  late Future<AppDatabase> databaseInstance;
 
   setUp(
-    () {
+    () async {
       mockedService = MockApiGenresService();
-      genreRepo = GenreRepositoryImpl(genresService: mockedService);
+      databaseInstance =
+          $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      genreRepo = GenreRepositoryImpl(
+        genresService: mockedService,
+        databaseInstance: databaseInstance,
+      );
     },
   );
 
@@ -54,24 +61,33 @@ void main() {
       );
 
       test(
-        'getData() receives DataSuccess with an empty model,'
-        'should return DataError',
+        "getData() receives DataSuccess with an empty model,"
+        "should return DataSuccess if the db has items"
+        "and DataError if it hasn't",
         () async {
           when(() => mockedService.fetchDataFromApi()).thenAnswer(
             (_) async => DataSuccess(
               GenreMocks.mockedGenreModelEmptyList,
             ),
           );
-          DataState genres = await genreRepo.getData();
-          expect(genres, isA<DataError>());
-          DataState movies = await genreRepo.getData();
-          expect(movies, isInstanceOf<DataError>());
+
+          AppDatabase database = await databaseInstance;
+          List<Genre> genresFromDB = await database.genreDao.getFirstGenre();
+
+          if (genresFromDB.isNotEmpty) {
+            DataState genres = await genreRepo.getData();
+            expect(genres, isA<DataSuccess>());
+          } else {
+            DataState genres = await genreRepo.getData();
+            expect(genres, isA<DataError>());
+          }
         },
       );
 
       test(
-          'getData() receives a DataError from service,'
-          'should return a DataError', () async {
+          "getData() receives a DataError from service,"
+          "should return DataSuccess if the db has items"
+          "and DataError if it hasn't", () async {
         when(() => mockedService.fetchDataFromApi()).thenAnswer(
           (_) async => DataError(
             Exception(
@@ -79,8 +95,16 @@ void main() {
             ),
           ),
         );
-        DataState movies = await genreRepo.getData();
-        expect(movies, isInstanceOf<DataError>());
+        AppDatabase database = await databaseInstance;
+        List<Genre> genreFromDB = await database.genreDao.getFirstGenre();
+
+        if (genreFromDB.isNotEmpty) {
+          DataState genres = await genreRepo.getData();
+          expect(genres, isA<DataSuccess>());
+        } else {
+          DataState genres = await genreRepo.getData();
+          expect(genres, isA<DataError>());
+        }
       });
     },
   );

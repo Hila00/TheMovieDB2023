@@ -189,6 +189,26 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
+  Future<List<Movie>> getFirstMovie() async {
+    return _queryAdapter.queryList('SELECT * FROM Movie LIMIT 1',
+        mapper: (Map<String, Object?> row) => Movie(
+            adult: (row['adult'] as int) != 0,
+            backdropPath: row['backdropPath'] as String,
+            genreIds: _genresConverter.decode(row['genreIds'] as String),
+            id: row['id'] as int,
+            originalLanguage: row['originalLanguage'] as String,
+            originalTitle: row['originalTitle'] as String,
+            overview: row['overview'] as String,
+            popularity: row['popularity'] as double,
+            posterPath: row['posterPath'] as String,
+            releaseDate: row['releaseDate'] as String,
+            title: row['title'] as String,
+            video: (row['video'] as int) != 0,
+            voteAverage: row['voteAverage'] as double,
+            voteCount: row['voteCount'] as int));
+  }
+
+  @override
   Future<void> insertMovie(Movie movie) async {
     await _movieInsertionAdapter.insert(movie, OnConflictStrategy.replace);
   }
@@ -226,6 +246,13 @@ class _$GenreDao extends GenreDao {
         mapper: (Map<String, Object?> row) =>
             Genre(id: row['id'] as int, name: row['name'] as String),
         arguments: [id]);
+  }
+
+  @override
+  Future<List<Genre>> getFirstGenre() async {
+    return _queryAdapter.queryList('SELECT * FROM genre LIMIT 1',
+        mapper: (Map<String, Object?> row) =>
+            Genre(id: row['id'] as int, name: row['name'] as String));
   }
 
   @override

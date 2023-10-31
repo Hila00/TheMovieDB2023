@@ -1,5 +1,6 @@
 import 'dart:core';
 import '../../core/util/api_constants.dart';
+import '../../core/util/constants.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_repository.dart';
 import '../datasource/local/DAOs/genre_dao.dart';
@@ -10,16 +11,18 @@ import '../model/genre_model.dart';
 
 class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
   IApiService genresService;
+  Future<AppDatabase> databaseInstance;
 
   GenreRepositoryImpl({
     required this.genresService,
+    required this.databaseInstance,
   });
 
   @override
   Future<DataState<List<Genre>>> getData() async {
-    AppDatabase database =
-        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    AppDatabase database = await databaseInstance;
     DataState dataState = await genresService.fetchDataFromApi();
+
     if (dataState is DataSuccess) {
       List<GenreModel> genreModel = dataState.data;
 
@@ -28,21 +31,26 @@ class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
         genreModel.map((genre) => genreDao.insertGenre(genre));
         return DataSuccess<List<Genre>>(genreModel);
       } else {
-        return DataError(
-          Exception(ApiConstants.errorMessage),
-        );
+        return getDatabaseState();
       }
-    } else {
-      final genreDao = database.genreDao;
-      List<Genre> genresFromDB = await genreDao.getAllGenres();
+    }
+    else {
+      return getDatabaseState();
+    }
+  }
 
-      if (genresFromDB.isNotEmpty) {
-        return DataSuccess(genresFromDB);
-      } else {
-        return DataError(
-          Exception(dataState.error),
-        );
-      }
+  Future<DataState<List<Genre>>> getDatabaseState() async {
+    AppDatabase database = await databaseInstance;
+    GenreDao genreDao = database.genreDao;
+    List<Genre> genresFromDB = await genreDao.getAllGenres();
+    if (genresFromDB.isNotEmpty) {
+      return DataSuccess(
+        genresFromDB,
+      );
+    } else {
+      return DataError(
+        Exception(AppConstants.databaseError),
+      );
     }
   }
 }

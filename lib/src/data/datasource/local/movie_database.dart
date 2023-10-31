@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
-
 import '../../../domain/entity/genre.dart';
 import '../../../domain/entity/movie.dart';
 import 'DAOs/genre_dao.dart';

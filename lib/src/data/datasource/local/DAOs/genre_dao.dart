@@ -9,6 +9,9 @@ abstract class GenreDao {
   @Query('SELECT * FROM genre WHERE id = :id')
   Future<Genre?> getGenreById(int id);
 
+  @Query('SELECT * FROM genre LIMIT 1')
+  Future<List<Genre>> getFirstGenre();
+
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertGenre(Genre genre);
 }

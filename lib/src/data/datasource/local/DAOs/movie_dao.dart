@@ -13,6 +13,9 @@ abstract class MovieDao {
   @Query('SELECT * FROM Movie WHERE id = :id')
   Future<Movie?> getMovieById(int id);
 
+  @Query('SELECT * FROM Movie LIMIT 1')
+  Future<List<Movie>> getFirstMovie();
+
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertMovie(Movie movie);
 }

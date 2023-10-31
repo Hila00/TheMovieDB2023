@@ -40,7 +40,7 @@ class MovieDetails extends StatelessWidget {
               size: starIconSize,
             ),
             CustomText(
-              text: '$movieVoteAverage',
+              text: '${movieVoteAverage}',
               fontSize: movieVoteAverageSize,
             ),
           ],
