@@ -7,9 +7,9 @@ class MovieOverview extends StatelessWidget {
   static const double containerBorderRadius = 30;
   static const double containerMargin = 10;
   static const double containerPadding = 15;
-  String overview;
+  final String overview;
 
-  MovieOverview({
+  const MovieOverview({
     required this.overview,
     super.key,
   });

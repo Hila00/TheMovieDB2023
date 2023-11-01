@@ -3,17 +3,19 @@ import '../custom_text_widget.dart';
 import '../../../core/util/constants.dart';
 
 class MovieDetails extends StatelessWidget {
-  String movieTitle;
-  String movieReleaseDate;
-  double movieVoteAverage;
+  final String movieTitle;
+  final String movieReleaseDate;
+  final double movieVoteAverage;
   static const String releaseDateText = 'Release date: ';
   static const String movieTitleKey = 'MovieTitleKey';
   static const double movieTitleSize = 36;
   static const double movieReleaseDateSize = 18;
   static const double movieVoteAverageSize = 25;
   static const double starIconSize = 45;
+  static const int voteAverageSubstringStart = 0;
+  static const int voteAverageSubstringEnd = 3;
 
-  MovieDetails({
+  const MovieDetails({
     required this.movieTitle,
     required this.movieReleaseDate,
     required this.movieVoteAverage,
@@ -40,7 +42,10 @@ class MovieDetails extends StatelessWidget {
               size: starIconSize,
             ),
             CustomText(
-              text: '${movieVoteAverage}',
+              text: movieVoteAverage.toString().substring(
+                    voteAverageSubstringStart,
+                    voteAverageSubstringEnd,
+                  ),
               fontSize: movieVoteAverageSize,
             ),
           ],

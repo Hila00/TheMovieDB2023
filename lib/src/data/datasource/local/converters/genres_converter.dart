@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:floor/floor.dart';
 
 class GenresConverter extends TypeConverter<List<int>, String> {

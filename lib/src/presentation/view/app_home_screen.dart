@@ -39,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     MoviesBloc bloc = Provider.of<MoviesBloc>(context);
-    var connectivity = Connectivity().checkConnectivity();
+    Future<ConnectivityResult> connectivity =
+        Connectivity().checkConnectivity();
 
     return Scaffold(
       drawer: const AppDrawer(),

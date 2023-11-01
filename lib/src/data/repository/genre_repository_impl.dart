@@ -1,5 +1,4 @@
 import 'dart:core';
-import '../../core/util/api_constants.dart';
 import '../../core/util/constants.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_repository.dart';
@@ -33,8 +32,7 @@ class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
       } else {
         return getDatabaseState();
       }
-    }
-    else {
+    } else {
       return getDatabaseState();
     }
   }

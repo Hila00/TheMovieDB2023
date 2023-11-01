@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../app_circular_progress_indicator.dart';
 
 class MoviePoster extends StatelessWidget {
-  String posterImageUrl;
-  double posterImageWidth;
-  double posterImageHeight;
+  final String posterImageUrl;
+  final double posterImageWidth;
+  final double posterImageHeight;
 
-  MoviePoster({
+  const MoviePoster({
     required this.posterImageUrl,
     required this.posterImageWidth,
     required this.posterImageHeight,

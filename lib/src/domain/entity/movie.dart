@@ -1,5 +1,4 @@
 import 'package:floor/floor.dart';
-
 import '../../core/util/api_constants.dart';
 
 @entity
