@@ -14,4 +14,7 @@ abstract class GenreDao {
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertGenre(Genre genre);
+
+  @Query('DELETE FROM genre WHERE id = :id')
+  Future<void> deleteGenreById(int id);
 }

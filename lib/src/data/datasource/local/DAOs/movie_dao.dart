@@ -18,4 +18,7 @@ abstract class MovieDao {
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertMovie(Movie movie);
+
+  @Query('DELETE FROM Movie WHERE id = :id')
+  Future<void> deleteMovieById(int id);
 }

@@ -209,6 +209,12 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
+  Future<void> deleteMovieById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM Movie WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
   Future<void> insertMovie(Movie movie) async {
     await _movieInsertionAdapter.insert(movie, OnConflictStrategy.replace);
   }
@@ -253,6 +259,12 @@ class _$GenreDao extends GenreDao {
     return _queryAdapter.queryList('SELECT * FROM genre LIMIT 1',
         mapper: (Map<String, Object?> row) =>
             Genre(id: row['id'] as int, name: row['name'] as String));
+  }
+
+  @override
+  Future<void> deleteGenreById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM genre WHERE id = ?1', arguments: [id]);
   }
 
   @override
