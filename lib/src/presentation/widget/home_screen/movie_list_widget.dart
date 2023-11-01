@@ -14,11 +14,11 @@ class MovieListWidget extends StatelessWidget {
   static const double containerPadding = 10;
   static const int gridViewCrossAxisCount = 1;
   final double containerHeight;
-  IMoviesBloc moviesBloc;
-  Stream<AppEvent> moviesStream;
-  String? type;
+  final IMoviesBloc moviesBloc;
+  final Stream<AppEvent> moviesStream;
+  final String? type;
 
-  MovieListWidget({
+  const MovieListWidget({
     this.containerHeight = containerHeightDefaultValue,
     this.type,
     required this.moviesBloc,
@@ -49,6 +49,11 @@ class MovieListWidget extends StatelessWidget {
             case Categories.popular:
               {
                 moviesBloc.fetchPopularMovies();
+                break;
+              }
+            case Categories.savedMovies:
+              {
+                moviesBloc.fetchSavedMoviesFromDb();
                 break;
               }
           }

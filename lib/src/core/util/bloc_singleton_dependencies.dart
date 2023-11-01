@@ -39,6 +39,12 @@ class BlocSingletonDependencies {
         databaseInstance: databaseInstance,
       ),
     ),
+    savedMoviesFromDbUseCase: MoviesUseCase(
+      movieRepository: MovieRepositoryImpl(
+        movieService: ApiMovieService(endPoint: ''),
+        databaseInstance: databaseInstance,
+      ),
+    ),
   );
 
   static TrailersBloc trailersBloc = TrailersBloc(

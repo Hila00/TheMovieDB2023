@@ -8,16 +8,19 @@ class MoviesBloc extends IMoviesBloc {
   IUseCase popularMoviesUseCase;
   IUseCase topRatedMoviesUseCase;
   IUseCase nowPlayingMoviesUseCase;
+  IUseCase savedMoviesFromDbUseCase;
 
   MoviesBloc({
     required this.popularMoviesUseCase,
     required this.topRatedMoviesUseCase,
     required this.nowPlayingMoviesUseCase,
+    required this.savedMoviesFromDbUseCase,
   });
 
   final _topRatedMoviesController = StreamController<AppEvent>.broadcast();
   final _popularMoviesController = StreamController<AppEvent>.broadcast();
   final _nowPlayingMoviesController = StreamController<AppEvent>.broadcast();
+  final _savedMoviesFromDbController = StreamController<AppEvent>.broadcast();
 
   Stream<AppEvent> get allTopRatedMovies => _topRatedMoviesController.stream;
 
@@ -26,11 +29,15 @@ class MoviesBloc extends IMoviesBloc {
   Stream<AppEvent> get allNowPlayingMovies =>
       _nowPlayingMoviesController.stream;
 
+  Stream<AppEvent> get allSavedMoviesFromDb =>
+      _savedMoviesFromDbController.stream;
+
   @override
   void dispose() {
     _topRatedMoviesController.close();
     _popularMoviesController.close();
     _nowPlayingMoviesController.close();
+    _savedMoviesFromDbController.close();
   }
 
   @override
@@ -97,6 +104,28 @@ class MoviesBloc extends IMoviesBloc {
       );
     } else {
       _topRatedMoviesController.sink.add(
+        AppEvent(
+          status: Status.error,
+        ),
+      );
+    }
+  }
+
+  @override
+  void fetchSavedMoviesFromDb() async {
+    DataState savedMoviesFromDbState = await savedMoviesFromDbUseCase.call();
+
+    if (savedMoviesFromDbState is DataSuccess) {
+      _savedMoviesFromDbController.sink.add(
+        AppEvent(
+          status: savedMoviesFromDbState.data.isNotEmpty
+              ? Status.success
+              : Status.empty,
+          data: savedMoviesFromDbState.data,
+        ),
+      );
+    } else {
+      _savedMoviesFromDbController.sink.add(
         AppEvent(
           status: Status.error,
         ),

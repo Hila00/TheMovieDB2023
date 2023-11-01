@@ -67,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: Categories.savedMovies,
                         ),
                         MovieListWidget(
-                          moviesStream: bloc.allTopRatedMovies,
+                          moviesStream: bloc.allSavedMoviesFromDb,
                           moviesBloc: bloc,
-                          type: Categories.topRated,
+                          type: Categories.savedMovies,
                         ),
                       ],
                     );

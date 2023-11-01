@@ -6,4 +6,6 @@ abstract class IMoviesBloc extends IBloc {
   void fetchTopRatedMovies();
 
   void fetchNowPlayingMovies();
+
+  void fetchSavedMoviesFromDb();
 }

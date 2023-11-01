@@ -23,6 +23,7 @@ void main() async {
         popularMoviesUseCase: mockedUseCase,
         topRatedMoviesUseCase: mockedUseCase,
         nowPlayingMoviesUseCase: mockedUseCase,
+        savedMoviesFromDbUseCase: mockedUseCase,
       );
     },
   );
@@ -131,12 +132,12 @@ void main() async {
 
       test(
         'movieBloc receives a DataError from use case,'
-            'topRatedMovies stream should stream an AppEvent error',
-            () async {
+        'topRatedMovies stream should stream an AppEvent error',
+        () async {
           when(
-                () => mockedUseCase.call(),
+            () => mockedUseCase.call(),
           ).thenAnswer(
-                (_) => DataError(
+            (_) => DataError(
               Exception(
                 ApiConstants.errorMessage,
               ),
@@ -144,7 +145,7 @@ void main() async {
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allTopRatedMovies.listen(
-                (movieState) {
+            (movieState) {
               expect(movieState, isA<AppEvent>);
               expect(movieState.status, Status.error);
             },
@@ -155,12 +156,12 @@ void main() async {
 
       test(
         'movieBloc receives a DataError from use case,'
-            'nowPlayingMovies stream should stream an AppEvent error',
-            () async {
+        'nowPlayingMovies stream should stream an AppEvent error',
+        () async {
           when(
-                () => mockedUseCase.call(),
+            () => mockedUseCase.call(),
           ).thenAnswer(
-                (_) => DataError(
+            (_) => DataError(
               Exception(
                 ApiConstants.errorMessage,
               ),
@@ -168,7 +169,7 @@ void main() async {
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allNowPlayingMovies.listen(
-                (movieState) {
+            (movieState) {
               expect(movieState, isA<AppEvent>);
               expect(movieState.status, Status.error);
             },
