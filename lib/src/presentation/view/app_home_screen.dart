@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/util/api_constants.dart';
 import '../../core/util/categories.dart';
 import '../../core/util/constants.dart';
 import '../bloc/movies_bloc.dart';
 import '../widget/app_drawer.dart';
 import '../widget/app_header.dart';
-import '../widget/home_screen/category_outstanding_title.dart';
-import '../widget/home_screen/category_title.dart';
 import '../widget/home_screen/home_search_bar.dart';
 import '../widget/home_screen/movie_list_widget.dart';
 
@@ -18,6 +17,7 @@ class HomeScreen extends StatefulWidget {
   static const double outstandingListHeight = 450;
   static const double errorMessageFontSize = 20;
   static const double wifiOffIconSize = 50;
+  static const double outStandingTitleListFontSize = 40;
 
   const HomeScreen({
     super.key,
@@ -66,44 +66,39 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Color(AppConstants.appFontColor),
                           size: HomeScreen.wifiOffIconSize,
                         ),
-                        const CategoryOutstandingTitle(
-                          title: Categories.savedMovies,
-                        ),
                         MovieListWidget(
                           moviesStream: bloc.allSavedMoviesFromDb,
                           moviesBloc: bloc,
-                          type: Categories.savedMovies,
+                          endPoint: Categories.savedMovies,
+                          categoryTitle: Categories.savedMovies,
                         ),
                       ],
                     );
                   } else {
                     return Column(
                       children: [
-                        const CategoryTitle(title: Categories.topRated),
                         MovieListWidget(
                           moviesStream: bloc.allTopRatedMovies,
                           moviesBloc: bloc,
-                          type: Categories.topRated,
+                          endPoint: ApiConstants.topRatedMoviesEndPoint,
+                          categoryTitle: Categories.topRated,
                         ),
                         const SizedBox(
                           height: HomeScreen.sizedBoxSize,
                         ),
-                        const CategoryOutstandingTitle(
-                          title: Categories.popular,
-                        ),
                         MovieListWidget(
                           moviesStream: bloc.allPopularMovies,
                           moviesBloc: bloc,
-                          type: Categories.popular,
+                          endPoint: ApiConstants.popularMoviesEndPoint,
                           containerHeight: HomeScreen.outstandingListHeight,
-                        ),
-                        const CategoryTitle(
-                          title: Categories.nowPlaying,
+                          listTitleFontSize: HomeScreen.outStandingTitleListFontSize,
+                          categoryTitle: Categories.popular,
                         ),
                         MovieListWidget(
                           moviesStream: bloc.allNowPlayingMovies,
-                          type: Categories.nowPlaying,
+                          endPoint: ApiConstants.nowPlayingMoviesEndPoint,
                           moviesBloc: bloc,
+                          categoryTitle: Categories.nowPlaying,
                         ),
                       ],
                     );

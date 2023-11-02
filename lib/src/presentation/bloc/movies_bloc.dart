@@ -5,7 +5,6 @@ import '../../core/util/api_constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/app_event.dart';
 import '../../domain/usecase/implementation/movies_use_case.dart';
-import '../../domain/usecase/usecase_interface.dart';
 
 class MoviesBloc extends IMoviesBloc {
   MoviesUseCase moviesUseCase;
@@ -43,92 +42,53 @@ class MoviesBloc extends IMoviesBloc {
   }
 
   @override
-  void fetchNowPlayingMovies() async {
-    moviesUseCase.categoryEndPoint = ApiConstants.nowPlayingMoviesEndPoint;
-    DataState nowPlayingMoviesState = await moviesUseCase.call();
-
-    if (nowPlayingMoviesState is DataSuccess) {
-      _nowPlayingMoviesController.sink.add(
-        AppEvent(
-          status: nowPlayingMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: nowPlayingMoviesState.data,
-        ),
-      );
-    } else {
-      _nowPlayingMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
-      );
+  void fetchMovies(String endPoint) async {
+    switch (endPoint) {
+      case ApiConstants.topRatedMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint = ApiConstants.topRatedMoviesEndPoint;
+          DataState topRatedMoviesState = await moviesUseCase.call();
+          _topRatedMoviesController.sink.add(
+            _getMoviesStatusOnEvent(topRatedMoviesState),
+          );
+        }
+      case ApiConstants.popularMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint = ApiConstants.popularMoviesEndPoint;
+          DataState popularMoviesState = await moviesUseCase.call();
+          _popularMoviesController.sink.add(
+            _getMoviesStatusOnEvent(popularMoviesState),
+          );
+        }
+      case ApiConstants.nowPlayingMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint =
+              ApiConstants.nowPlayingMoviesEndPoint;
+          DataState nowPlayingMoviesState = await moviesUseCase.call();
+          _nowPlayingMoviesController.sink.add(
+            _getMoviesStatusOnEvent(nowPlayingMoviesState),
+          );
+        }
+      default:
+        {
+          moviesUseCase.categoryEndPoint = '';
+          DataState savedMoviesState = await moviesUseCase.call();
+          _savedMoviesFromDbController.sink.add(
+            _getMoviesStatusOnEvent(savedMoviesState),
+          );
+        }
     }
   }
 
-  @override
-  void fetchPopularMovies() async {
-    moviesUseCase.categoryEndPoint = ApiConstants.popularMoviesEndPoint;
-    DataState popularMoviesState = await moviesUseCase.call();
-
-    if (popularMoviesState is DataSuccess) {
-      _popularMoviesController.sink.add(
-        AppEvent(
-          status: popularMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: popularMoviesState.data,
-        ),
+  AppEvent _getMoviesStatusOnEvent(DataState moviesDataState) {
+    if (moviesDataState is DataSuccess) {
+      return AppEvent(
+        status: moviesDataState.data.isNotEmpty ? Status.success : Status.empty,
+        data: moviesDataState.data,
       );
     } else {
-      _popularMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
-      );
-    }
-  }
-
-  @override
-  void fetchTopRatedMovies() async {
-    moviesUseCase.categoryEndPoint = ApiConstants.topRatedMoviesEndPoint;
-    DataState topRatedMoviesState = await moviesUseCase.call();
-
-    if (topRatedMoviesState is DataSuccess) {
-      _topRatedMoviesController.sink.add(
-        AppEvent(
-          status: topRatedMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: topRatedMoviesState.data,
-        ),
-      );
-    } else {
-      _topRatedMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
-      );
-    }
-  }
-
-  @override
-  void fetchSavedMoviesFromDb() async {
-    DataState savedMoviesFromDbState = await moviesUseCase.call();
-
-    if (savedMoviesFromDbState is DataSuccess) {
-      _savedMoviesFromDbController.sink.add(
-        AppEvent(
-          status: savedMoviesFromDbState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: savedMoviesFromDbState.data,
-        ),
-      );
-    } else {
-      _savedMoviesFromDbController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
+      return AppEvent(
+        status: Status.error,
       );
     }
   }

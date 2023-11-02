@@ -4,18 +4,18 @@ import '../../../../domain/entity/genre.dart';
 
 @dao
 abstract class GenreDao {
-  @Query('SELECT * FROM genre')
+  @Query('SELECT * FROM Genre')
   Future<List<Genre>> getAllGenres();
 
-  @Query('SELECT * FROM genre WHERE id = :id')
+  @Query('SELECT * FROM Genre WHERE id = :id')
   Future<Genre?> getGenreById(int id);
 
-  @Query('SELECT * FROM genre LIMIT 1')
+  @Query('SELECT * FROM Genre LIMIT 1')
   Future<List<Genre>> getFirstGenre();
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertGenre(Genre genre);
 
-  @Query('DELETE FROM genre WHERE id = :id')
+  @Query('DELETE FROM Genre WHERE id = :id')
   Future<void> deleteGenreById(int id);
 }

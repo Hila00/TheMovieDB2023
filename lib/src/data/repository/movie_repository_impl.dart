@@ -18,25 +18,22 @@ class MovieRepositoryImpl implements IMovieRepository<DataState<List<Movie>>> {
 
   @override
   Future<DataState<List<Movie>>> getData(String endPoint) async {
-    MovieDao movieDao =  await databaseInstance.getMovieDao();
+    MovieDao movieDao = await databaseInstance.getMovieDao();
     DataState dataState = await movieService.fetchMoviesFromApi(endPoint);
 
     if (dataState is DataSuccess) {
       List<MovieModel> movieModel = dataState.data;
-
       if (movieModel.isNotEmpty) {
         movieModel.map((movie) => movieDao.insertMovie(movie));
         return DataSuccess<List<Movie>>(movieModel);
-      } else {
-        return getDatabaseState();
       }
-    } else {
-      return getDatabaseState();
     }
+
+    return _getDatabaseState();
   }
 
-  Future<DataState<List<Movie>>> getDatabaseState() async {
-    MovieDao movieDao =  await databaseInstance.getMovieDao();
+  Future<DataState<List<Movie>>> _getDatabaseState() async {
+    MovieDao movieDao = await databaseInstance.getMovieDao();
     List<Movie> moviesFromDb = await movieDao.getAllMovies();
 
     if (moviesFromDb.isNotEmpty) {

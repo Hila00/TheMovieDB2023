@@ -1,10 +1,13 @@
+import '../../core/util/constants.dart';
 import '../datasource/local/DAOs/genre_dao.dart';
 import '../datasource/local/DAOs/movie_dao.dart';
 import '../datasource/local/movie_database.dart';
 
 class DatabaseRepository {
   Future<AppDatabase> initializeDb() async {
-    return await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    return await $FloorAppDatabase
+        .databaseBuilder(AppConstants.databaseAccessString)
+        .build();
   }
 
   Future<MovieDao> getMovieDao() async {

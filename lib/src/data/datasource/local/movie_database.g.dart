@@ -89,7 +89,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Movie` (`id` INTEGER NOT NULL, `adult` INTEGER NOT NULL, `backdropPath` TEXT NOT NULL, `genreIds` TEXT NOT NULL, `originalLanguage` TEXT NOT NULL, `originalTitle` TEXT NOT NULL, `overview` TEXT NOT NULL, `popularity` REAL NOT NULL, `posterPath` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, `title` TEXT NOT NULL, `video` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `voteCount` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `genre` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Genre` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -227,7 +227,7 @@ class _$GenreDao extends GenreDao {
   )   : _queryAdapter = QueryAdapter(database),
         _genreInsertionAdapter = InsertionAdapter(
             database,
-            'genre',
+            'Genre',
             (Genre item) =>
                 <String, Object?>{'id': item.id, 'name': item.name});
 
@@ -241,14 +241,14 @@ class _$GenreDao extends GenreDao {
 
   @override
   Future<List<Genre>> getAllGenres() async {
-    return _queryAdapter.queryList('SELECT * FROM genre',
+    return _queryAdapter.queryList('SELECT * FROM Genre',
         mapper: (Map<String, Object?> row) =>
             Genre(id: row['id'] as int, name: row['name'] as String));
   }
 
   @override
   Future<Genre?> getGenreById(int id) async {
-    return _queryAdapter.query('SELECT * FROM genre WHERE id = ?1',
+    return _queryAdapter.query('SELECT * FROM Genre WHERE id = ?1',
         mapper: (Map<String, Object?> row) =>
             Genre(id: row['id'] as int, name: row['name'] as String),
         arguments: [id]);
@@ -256,7 +256,7 @@ class _$GenreDao extends GenreDao {
 
   @override
   Future<List<Genre>> getFirstGenre() async {
-    return _queryAdapter.queryList('SELECT * FROM genre LIMIT 1',
+    return _queryAdapter.queryList('SELECT * FROM Genre LIMIT 1',
         mapper: (Map<String, Object?> row) =>
             Genre(id: row['id'] as int, name: row['name'] as String));
   }
@@ -264,7 +264,7 @@ class _$GenreDao extends GenreDao {
   @override
   Future<void> deleteGenreById(int id) async {
     await _queryAdapter
-        .queryNoReturn('DELETE FROM genre WHERE id = ?1', arguments: [id]);
+        .queryNoReturn('DELETE FROM Genre WHERE id = ?1', arguments: [id]);
   }
 
   @override

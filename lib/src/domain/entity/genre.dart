@@ -1,6 +1,8 @@
 import 'package:floor/floor.dart';
 
-@Entity(tableName: 'genre')
+
+
+@entity
 class Genre {
   @primaryKey
   int id;
