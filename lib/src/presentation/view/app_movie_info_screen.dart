@@ -1,16 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/util/bloc_singleton_dependencies.dart';
 import '../../core/util/constants.dart';
 import '../../domain/entity/movie.dart';
 import '../widget/app_circular_progress_indicator.dart';
 import '../widget/app_drawer.dart';
-import '../widget/movie_info_screen/genres_list_widget.dart';
 import '../widget/app_header.dart';
-import '../widget/movie_info_screen/related_genres_title.dart';
-import '../widget/movie_info_screen/movie_overview.dart';
+import '../widget/movie_info_screen/genres_list_widget.dart';
 import '../widget/movie_info_screen/movie_info_container.dart';
+import '../widget/movie_info_screen/movie_overview.dart';
+import '../widget/movie_info_screen/related_genres_title.dart';
 
 class AppMovieInfo extends StatelessWidget {
   static const double sizedBoxHeight = 10;

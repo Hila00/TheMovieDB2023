@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'src/core/util/bloc_singleton_dependencies.dart';
+
+import 'package:provider/provider.dart';
+
 import 'src/config/route/app_routes.dart';
+import 'src/core/util/bloc_singleton_dependencies.dart';
 import 'src/core/util/constants.dart';
 import 'src/presentation/view/app_home_screen.dart';
 import 'src/presentation/view/app_trailers_screen.dart';
-import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -28,11 +30,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.homeScreenRoute,
       routes: {
-        AppRoutes.homeScreenRoute: (context) => Provider(
+        AppRoutes.homeScreenRoute: (BuildContext context) => Provider(
               create: (_) => BlocSingletonDependencies.moviesBloc,
               child: const HomeScreen(),
             ),
-        AppRoutes.trailersRoute: (context) => Provider(
+        AppRoutes.trailersRoute: (BuildContext context) => Provider(
               create: (_) => BlocSingletonDependencies.trailersBloc,
               child: const AppTrailersScreen(),
             ),

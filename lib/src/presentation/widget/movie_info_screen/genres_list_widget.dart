@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
+import '../../../core/util/constants.dart';
 import '../../../domain/entity/app_event.dart';
+import '../../../domain/entity/genre.dart';
 import '../../bloc/genres_bloc.dart';
 import '../app_circular_progress_indicator.dart';
 import '../custom_text_widget.dart';
-import '../../../domain/entity/genre.dart';
-import '../../../core/util/constants.dart';
 
 class GenresList extends StatefulWidget {
   static const double containerBorderRadius = 15;

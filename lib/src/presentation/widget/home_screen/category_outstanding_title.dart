@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'category_title.dart';
 
 class CategoryOutstandingTitle extends CategoryTitle {

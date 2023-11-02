@@ -1,13 +1,15 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
+
 import '../../core/util/categories.dart';
 import '../../core/util/constants.dart';
 import '../bloc/movies_bloc.dart';
 import '../widget/app_drawer.dart';
 import '../widget/app_header.dart';
-import '../widget/home_screen/category_title.dart';
 import '../widget/home_screen/category_outstanding_title.dart';
+import '../widget/home_screen/category_title.dart';
 import '../widget/home_screen/home_search_bar.dart';
 import '../widget/home_screen/movie_list_widget.dart';
 

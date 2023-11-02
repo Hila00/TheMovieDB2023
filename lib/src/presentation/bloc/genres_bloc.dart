@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import '../../core/bloc/i_bloc.dart';
 import '../../core/util/data_state.dart';
-import '../../domain/entity/genre.dart';
 import '../../domain/entity/app_event.dart';
+import '../../domain/entity/genre.dart';
 import '../../domain/usecase/usecase_interface.dart';
 
 class GenresBloc extends IBloc {

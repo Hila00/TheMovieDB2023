@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
+import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_service.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/data/repository/genre_repository_impl.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/genre.dart';
-
 import '../../mocks/genre_mocks.dart';
 
 class MockApiGenresService extends Mock implements IApiService {}

@@ -1,7 +1,7 @@
 import '../../core/util/constants.dart';
 import '../../core/util/data_state.dart';
-import '../../domain/repository/i_repository.dart';
 import '../../domain/entity/movie.dart';
+import '../../domain/repository/i_repository.dart';
 import '../datasource/local/DAOs/movie_dao.dart';
 import '../datasource/local/movie_database.dart';
 import '../datasource/remote/i_api_service.dart';

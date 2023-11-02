@@ -1,13 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/app_event.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
 import 'package:the_movie_db_module2_part1/src/domain/usecase/usecase_interface.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/bloc/movies_bloc.dart';
-import 'package:mocktail/mocktail.dart';
-
 import '../../mocks/movie_mocks.dart';
 
 class MockedMoviesUseCase extends Mock implements IUseCase {}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../custom_text_widget.dart';
 
 class CategoryTitle extends StatelessWidget {

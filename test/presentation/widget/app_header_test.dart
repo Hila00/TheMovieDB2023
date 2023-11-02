@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/constants.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/widget/app_header.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/bloc/i_movies_bloc.dart';
 import '../../../core/util/categories.dart';
 import '../../../core/util/constants.dart';

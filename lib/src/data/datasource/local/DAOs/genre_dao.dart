@@ -1,4 +1,5 @@
 import 'package:floor/floor.dart';
+
 import '../../../../domain/entity/genre.dart';
 
 @dao

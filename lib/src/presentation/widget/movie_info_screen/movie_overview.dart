@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../custom_text_widget.dart';
+
 import '../../../core/util/constants.dart';
+import '../custom_text_widget.dart';
 
 class MovieOverview extends StatelessWidget {
   static const double overviewFontSize = 18;

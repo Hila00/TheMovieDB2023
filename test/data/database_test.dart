@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/DAOs/genre_dao.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/DAOs/movie_dao.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/genre.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
-
 import '../mocks/genre_mocks.dart';
 import '../mocks/movie_mocks.dart';
 

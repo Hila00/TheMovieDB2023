@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
 import 'package:the_movie_db_module2_part1/src/domain/repository/i_repository.dart';
 import 'package:the_movie_db_module2_part1/src/domain/usecase/implementation/movies_use_case.dart';
-
 import '../../mocks/movie_mocks.dart';
 
 class MockMoviesRepo extends Mock implements IRepository {}

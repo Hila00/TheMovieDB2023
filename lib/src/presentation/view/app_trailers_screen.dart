@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
 import '../../core/util/error_message_widget.dart';
 import '../../domain/entity/app_event.dart';
 import '../../domain/entity/movie.dart';

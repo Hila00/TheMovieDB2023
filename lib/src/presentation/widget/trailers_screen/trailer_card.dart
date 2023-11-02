@@ -1,6 +1,9 @@
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '../../../core/util/constants.dart';
 import '../../../domain/entity/movie.dart';
 import '../app_circular_progress_indicator.dart';

@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/genre.dart';
 import 'package:the_movie_db_module2_part1/src/domain/repository/i_repository.dart';
 import 'package:the_movie_db_module2_part1/src/domain/usecase/implementation/genres_use_case.dart';
-
 import '../../mocks/genre_mocks.dart';
 
 class MockGenresRepo extends Mock implements IRepository {}
