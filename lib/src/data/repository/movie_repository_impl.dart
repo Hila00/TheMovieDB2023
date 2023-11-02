@@ -1,15 +1,15 @@
 import '../../core/util/constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/movie.dart';
-import '../../domain/repository/i_repository.dart';
+import '../../domain/repository/i_movie_repository.dart';
 import '../datasource/local/DAOs/movie_dao.dart';
-import '../datasource/local/movie_database.dart';
-import '../datasource/remote/i_api_service.dart';
+import '../datasource/remote/i_api_movies_service.dart';
 import '../model/movie_model.dart';
+import 'database_repository.dart';
 
-class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
-  IApiService movieService;
-  Future<AppDatabase> databaseInstance;
+class MovieRepositoryImpl implements IMovieRepository<DataState<List<Movie>>> {
+  IApiMovieService movieService;
+  DatabaseRepository databaseInstance;
 
   MovieRepositoryImpl({
     required this.movieService,
@@ -17,15 +17,14 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
   });
 
   @override
-  Future<DataState<List<Movie>>> getData() async {
-    AppDatabase database = await databaseInstance;
-    DataState dataState = await movieService.fetchDataFromApi();
+  Future<DataState<List<Movie>>> getData(String endPoint) async {
+    MovieDao movieDao =  await databaseInstance.getMovieDao();
+    DataState dataState = await movieService.fetchMoviesFromApi(endPoint);
 
     if (dataState is DataSuccess) {
       List<MovieModel> movieModel = dataState.data;
 
       if (movieModel.isNotEmpty) {
-        MovieDao movieDao = database.movieDao;
         movieModel.map((movie) => movieDao.insertMovie(movie));
         return DataSuccess<List<Movie>>(movieModel);
       } else {
@@ -37,9 +36,8 @@ class MovieRepositoryImpl implements IRepository<DataState<List<Movie>>> {
   }
 
   Future<DataState<List<Movie>>> getDatabaseState() async {
-    AppDatabase database = await databaseInstance;
-    MovieDao dao = database.movieDao;
-    List<Movie> moviesFromDb = await dao.getAllMovies();
+    MovieDao movieDao =  await databaseInstance.getMovieDao();
+    List<Movie> moviesFromDb = await movieDao.getAllMovies();
 
     if (moviesFromDb.isNotEmpty) {
       return DataSuccess(

@@ -7,17 +7,12 @@ import '../../../core/util/api_constants.dart';
 import '../../../core/util/constants.dart';
 import '../../../core/util/data_state.dart';
 import '../../model/movie_model.dart';
-import 'i_api_service.dart';
+import 'i_api_movies_service.dart';
 
-class ApiMovieService extends IApiService {
-  String endPoint;
-
-  ApiMovieService({
-    required this.endPoint,
-  });
+class ApiMovieService extends IApiMovieService {
 
   @override
-  Future<DataState<List<MovieModel>>> fetchDataFromApi() async {
+  Future fetchMoviesFromApi(String endPoint) async {
     try {
       final Response response = await get(
         Uri.parse('${ApiConstants.baseUrlForMovies}$endPoint'),

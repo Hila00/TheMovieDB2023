@@ -1,21 +1,17 @@
 import 'dart:async';
 
 import '../../core/bloc/i_movies_bloc.dart';
+import '../../core/util/api_constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/app_event.dart';
+import '../../domain/usecase/implementation/movies_use_case.dart';
 import '../../domain/usecase/usecase_interface.dart';
 
 class MoviesBloc extends IMoviesBloc {
-  IUseCase popularMoviesUseCase;
-  IUseCase topRatedMoviesUseCase;
-  IUseCase nowPlayingMoviesUseCase;
-  IUseCase savedMoviesFromDbUseCase;
+  MoviesUseCase moviesUseCase;
 
   MoviesBloc({
-    required this.popularMoviesUseCase,
-    required this.topRatedMoviesUseCase,
-    required this.nowPlayingMoviesUseCase,
-    required this.savedMoviesFromDbUseCase,
+    required this.moviesUseCase,
   });
 
   final _topRatedMoviesController = StreamController<AppEvent>.broadcast();
@@ -48,7 +44,8 @@ class MoviesBloc extends IMoviesBloc {
 
   @override
   void fetchNowPlayingMovies() async {
-    DataState nowPlayingMoviesState = await nowPlayingMoviesUseCase.call();
+    moviesUseCase.categoryEndPoint = ApiConstants.nowPlayingMoviesEndPoint;
+    DataState nowPlayingMoviesState = await moviesUseCase.call();
 
     if (nowPlayingMoviesState is DataSuccess) {
       _nowPlayingMoviesController.sink.add(
@@ -70,7 +67,8 @@ class MoviesBloc extends IMoviesBloc {
 
   @override
   void fetchPopularMovies() async {
-    DataState popularMoviesState = await popularMoviesUseCase.call();
+    moviesUseCase.categoryEndPoint = ApiConstants.popularMoviesEndPoint;
+    DataState popularMoviesState = await moviesUseCase.call();
 
     if (popularMoviesState is DataSuccess) {
       _popularMoviesController.sink.add(
@@ -92,7 +90,8 @@ class MoviesBloc extends IMoviesBloc {
 
   @override
   void fetchTopRatedMovies() async {
-    DataState topRatedMoviesState = await topRatedMoviesUseCase.call();
+    moviesUseCase.categoryEndPoint = ApiConstants.topRatedMoviesEndPoint;
+    DataState topRatedMoviesState = await moviesUseCase.call();
 
     if (topRatedMoviesState is DataSuccess) {
       _topRatedMoviesController.sink.add(
@@ -114,7 +113,7 @@ class MoviesBloc extends IMoviesBloc {
 
   @override
   void fetchSavedMoviesFromDb() async {
-    DataState savedMoviesFromDbState = await savedMoviesFromDbUseCase.call();
+    DataState savedMoviesFromDbState = await moviesUseCase.call();
 
     if (savedMoviesFromDbState is DataSuccess) {
       _savedMoviesFromDbController.sink.add(
