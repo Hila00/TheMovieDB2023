@@ -24,7 +24,9 @@ class MovieRepositoryImpl implements IMovieRepository<DataState<List<Movie>>> {
     if (dataState is DataSuccess) {
       List<MovieModel> movieModel = dataState.data;
       if (movieModel.isNotEmpty) {
-        movieModel.map((movie) => movieDao.insertMovie(movie));
+        for (MovieModel movie in movieModel) {
+          await movieDao.insertMovie(movie);
+        }
         return DataSuccess<List<Movie>>(movieModel);
       }
     }

@@ -26,7 +26,9 @@ class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
     if (dataState is DataSuccess) {
       List<GenreModel> genreModel = dataState.data;
       if (genreModel.isNotEmpty) {
-        genreModel.map((genre) => genreDao.insertGenre(genre));
+        for (GenreModel genre in genreModel) {
+          await genreDao.insertGenre(genre);
+        }
         return DataSuccess<List<Genre>>(genreModel);
       }
     }

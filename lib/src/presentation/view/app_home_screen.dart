@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../../config/route/app_routes.dart';
 import '../../core/util/api_constants.dart';
 import '../../core/util/categories.dart';
 import '../../core/util/constants.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
   static const double errorMessageFontSize = 20;
   static const double wifiOffIconSize = 50;
   static const double outStandingTitleListFontSize = 40;
+  static const int refreshIndicatorTimeInSeconds = 0;
 
   const HomeScreen({
     super.key,
@@ -38,6 +40,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() {
+    return Future.delayed(
+      const Duration(seconds: HomeScreen.refreshIndicatorTimeInSeconds),
+      () {
+        Navigator.pushNamed(
+          context,
+          AppRoutes.homeScreenRoute,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MoviesBloc bloc = Provider.of<MoviesBloc>(context);
@@ -47,66 +61,69 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: const AppDrawer(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const AppHeader(),
-              const HomeScreenSearchBar(),
-              FutureBuilder(
-                future: connectivity,
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<ConnectivityResult> snapshot,
-                ) {
-                  if (snapshot.data == ConnectivityResult.none) {
-                    return Column(
-                      children: [
-                        const Icon(
-                          Icons.wifi_off,
-                          color: Color(AppConstants.appFontColor),
-                          size: HomeScreen.wifiOffIconSize,
-                        ),
-                        MovieListWidget(
-                          moviesStream: bloc.allSavedMoviesFromDb,
-                          moviesBloc: bloc,
-                          endPoint: Categories.savedMovies,
-                          categoryTitle: Categories.savedMovies,
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        MovieListWidget(
-                          moviesStream: bloc.allTopRatedMovies,
-                          moviesBloc: bloc,
-                          endPoint: ApiConstants.topRatedMoviesEndPoint,
-                          categoryTitle: Categories.topRated,
-                        ),
-                        const SizedBox(
-                          height: HomeScreen.sizedBoxSize,
-                        ),
-                        MovieListWidget(
-                          moviesStream: bloc.allPopularMovies,
-                          moviesBloc: bloc,
-                          endPoint: ApiConstants.popularMoviesEndPoint,
-                          containerHeight: HomeScreen.outstandingListHeight,
-                          listTitleFontSize:
-                              HomeScreen.outStandingTitleListFontSize,
-                          categoryTitle: Categories.popular,
-                        ),
-                        MovieListWidget(
-                          moviesStream: bloc.allNowPlayingMovies,
-                          endPoint: ApiConstants.nowPlayingMoviesEndPoint,
-                          moviesBloc: bloc,
-                          categoryTitle: Categories.nowPlaying,
-                        ),
-                      ],
-                    );
-                  }
-                },
-              ),
-            ],
+        child: RefreshIndicator(
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const AppHeader(),
+                const HomeScreenSearchBar(),
+                FutureBuilder(
+                  future: connectivity,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<ConnectivityResult> snapshot,
+                  ) {
+                    if (snapshot.data == ConnectivityResult.none) {
+                      return Column(
+                        children: [
+                          const Icon(
+                            Icons.wifi_off,
+                            color: Color(AppConstants.appFontColor),
+                            size: HomeScreen.wifiOffIconSize,
+                          ),
+                          MovieListWidget(
+                            moviesStream: bloc.allSavedMoviesFromDb,
+                            moviesBloc: bloc,
+                            endPoint: Categories.savedMovies,
+                            categoryTitle: Categories.savedMovies,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          MovieListWidget(
+                            moviesStream: bloc.allTopRatedMovies,
+                            moviesBloc: bloc,
+                            endPoint: ApiConstants.topRatedMoviesEndPoint,
+                            categoryTitle: Categories.topRated,
+                          ),
+                          const SizedBox(
+                            height: HomeScreen.sizedBoxSize,
+                          ),
+                          MovieListWidget(
+                            moviesStream: bloc.allPopularMovies,
+                            moviesBloc: bloc,
+                            endPoint: ApiConstants.popularMoviesEndPoint,
+                            containerHeight: HomeScreen.outstandingListHeight,
+                            listTitleFontSize:
+                                HomeScreen.outStandingTitleListFontSize,
+                            categoryTitle: Categories.popular,
+                          ),
+                          MovieListWidget(
+                            moviesStream: bloc.allNowPlayingMovies,
+                            endPoint: ApiConstants.nowPlayingMoviesEndPoint,
+                            moviesBloc: bloc,
+                            categoryTitle: Categories.nowPlaying,
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
