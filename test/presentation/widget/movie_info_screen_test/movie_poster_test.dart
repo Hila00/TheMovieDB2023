@@ -14,7 +14,7 @@ void main() {
       const double posterWidth = 150;
       const double posterHeight = 200;
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: MoviePoster(
             posterImageUrl: posterUrl,
             posterImageWidth: posterWidth,

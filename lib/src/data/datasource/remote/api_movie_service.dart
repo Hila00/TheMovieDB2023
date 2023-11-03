@@ -10,7 +10,6 @@ import '../../model/movie_model.dart';
 import 'i_api_movies_service.dart';
 
 class ApiMovieService extends IApiMovieService {
-
   @override
   Future fetchMoviesFromApi(String endPoint) async {
     try {

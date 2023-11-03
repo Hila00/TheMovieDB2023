@@ -8,6 +8,7 @@ import '../../domain/usecase/implementation/movies_use_case.dart';
 import '../../presentation/bloc/genres_bloc.dart';
 import '../../presentation/bloc/movies_bloc.dart';
 import '../../presentation/bloc/trailers_screen_bloc.dart';
+import 'api_constants.dart';
 
 class BlocSingletonDependencies {
   static DatabaseRepository dbRepo = DatabaseRepository();
@@ -17,6 +18,7 @@ class BlocSingletonDependencies {
       movieService: ApiMovieService(),
       databaseInstance: dbRepo,
     ),
+    categoryEndPoint: ApiConstants.popularMoviesEndPoint,
   );
 
   static GenresUseCase genresUseCase = GenresUseCase(

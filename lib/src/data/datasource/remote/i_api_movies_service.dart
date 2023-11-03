@@ -1,3 +1,3 @@
-abstract class IApiMovieService<T>{
+abstract class IApiMovieService<T> {
   Future<T> fetchMoviesFromApi(String endPoint);
 }

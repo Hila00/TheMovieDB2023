@@ -4,19 +4,23 @@ import 'package:mocktail/mocktail.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
-import 'package:the_movie_db_module2_part1/src/domain/repository/i_repository.dart';
+import 'package:the_movie_db_module2_part1/src/domain/repository/i_movie_repository.dart';
 import 'package:the_movie_db_module2_part1/src/domain/usecase/implementation/movies_use_case.dart';
 import '../../mocks/movie_mocks.dart';
 
-class MockMoviesRepo extends Mock implements IRepository {}
+class MockMoviesRepo extends Mock implements IMovieRepository {}
 
 void main() {
+  const mockedEndpoint = 'mocked_endpoint';
   late MoviesUseCase moviesUseCase;
   late MockMoviesRepo mockedRepo;
 
   setUp(() {
     mockedRepo = MockMoviesRepo();
-    moviesUseCase = MoviesUseCase(movieRepository: mockedRepo);
+    moviesUseCase = MoviesUseCase(
+      movieRepository: mockedRepo,
+      categoryEndPoint: mockedEndpoint,
+    );
   });
 
   group(
@@ -25,13 +29,13 @@ void main() {
       test(
         'Use case is calling repository getData() method properly',
         () async {
-          when(() => mockedRepo.getData()).thenAnswer(
+          when(() => mockedRepo.getData(mockedEndpoint)).thenAnswer(
             (_) async => DataSuccess(
               MovieMocks.mockedMovieList,
             ),
           );
           await moviesUseCase.call();
-          verify(() => mockedRepo.getData()).called(1);
+          verify(() => mockedRepo.getData(mockedEndpoint)).called(1);
         },
       );
 
@@ -39,7 +43,7 @@ void main() {
         'call() method returns List<Movie> successfully,'
         'inside a DataSuccess',
         () async {
-          when(() => mockedRepo.getData()).thenAnswer(
+          when(() => mockedRepo.getData(mockedEndpoint)).thenAnswer(
             (_) async => DataSuccess(
               MovieMocks.mockedMovieList,
             ),
@@ -55,7 +59,7 @@ void main() {
         'call() method receives a DataError from repository,'
         'should return a DataError',
         () async {
-          when(() => mockedRepo.getData()).thenAnswer(
+          when(() => mockedRepo.getData(mockedEndpoint)).thenAnswer(
             (_) async => DataError(
               Exception(
                 ApiConstants.errorMessage,
@@ -63,10 +67,21 @@ void main() {
             ),
           );
 
-          DataState data = await mockedRepo.getData();
+          DataState data = await mockedRepo.getData(mockedEndpoint);
           expect(data, isA<DataError>());
         },
       );
+
+      test('Set method should change the endPoint', () {
+        String oldEndpoint = moviesUseCase.categoryEndPoint;
+        String newEndpoint = 'new_endpoint';
+
+        expect(moviesUseCase.categoryEndPoint, equals(oldEndpoint));
+
+        moviesUseCase.categoryEndPoint = newEndpoint;
+
+        expect(moviesUseCase.categoryEndPoint, equals(newEndpoint));
+      });
     },
   );
 }

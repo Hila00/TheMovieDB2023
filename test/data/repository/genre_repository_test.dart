@@ -3,27 +3,27 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
-import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
-import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_service.dart';
+import 'package:the_movie_db_module2_part1/src/data/datasource/local/DAOs/genre_dao.dart';
+import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_genres_service.dart';
+import 'package:the_movie_db_module2_part1/src/data/repository/database_repository.dart';
 import 'package:the_movie_db_module2_part1/src/data/repository/genre_repository_impl.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/genre.dart';
 import '../../mocks/genre_mocks.dart';
 
-class MockApiGenresService extends Mock implements IApiService {}
+class MockApiGenresService extends Mock implements IApiGenreService {}
 
 void main() {
   late GenreRepositoryImpl genreRepo;
   late MockApiGenresService mockedService;
-  late Future<AppDatabase> databaseInstance;
+  late DatabaseRepository databaseInstance;
 
   setUp(
     () {
       mockedService = MockApiGenresService();
-      databaseInstance =
-          $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      databaseInstance = DatabaseRepository();
       genreRepo = GenreRepositoryImpl(
         genresService: mockedService,
-        databaseInstance: databaseInstance,
+        databaseRepository: databaseInstance,
       );
     },
   );
@@ -34,13 +34,13 @@ void main() {
       test(
         'Api service is called properly',
         () async {
-          when(() => mockedService.fetchDataFromApi()).thenAnswer(
+          when(() => mockedService.fetchGenresFromApi()).thenAnswer(
             (_) async => DataSuccess(
               GenreMocks.mockedGenreModelList,
             ),
           );
           await genreRepo.getData();
-          verify(() => mockedService.fetchDataFromApi()).called(1);
+          verify(() => mockedService.fetchGenresFromApi()).called(1);
         },
       );
 
@@ -48,7 +48,7 @@ void main() {
         'GetData() method get DataSuccess,'
         'that should have non empty list of genres',
         () async {
-          when(() => mockedService.fetchDataFromApi()).thenAnswer(
+          when(() => mockedService.fetchGenresFromApi()).thenAnswer(
             (_) async => DataSuccess(
               GenreMocks.mockedGenreModelList,
             ),
@@ -65,14 +65,14 @@ void main() {
         "should return DataSuccess if the db has items"
         "and DataError if it hasn't",
         () async {
-          when(() => mockedService.fetchDataFromApi()).thenAnswer(
+          when(() => mockedService.fetchGenresFromApi()).thenAnswer(
             (_) async => DataSuccess(
               GenreMocks.mockedGenreModelEmptyList,
             ),
           );
 
-          AppDatabase database = await databaseInstance;
-          List<Genre> genresFromDB = await database.genreDao.getFirstGenre();
+          GenreDao dao = await databaseInstance.getGenreDao();
+          List<Genre> genresFromDB = await dao.getFirstGenre();
 
           if (genresFromDB.isNotEmpty) {
             DataState genres = await genreRepo.getData();
@@ -89,17 +89,17 @@ void main() {
         "should return DataSuccess if the db has items"
         "and DataError if it hasn't",
         () async {
-          when(() => mockedService.fetchDataFromApi()).thenAnswer(
+          when(() => mockedService.fetchGenresFromApi()).thenAnswer(
             (_) async => DataError(
               Exception(
                 ApiConstants.errorMessage,
               ),
             ),
           );
-          AppDatabase database = await databaseInstance;
-          List<Genre> genreFromDB = await database.genreDao.getFirstGenre();
+          GenreDao dao = await databaseInstance.getGenreDao();
+          List<Genre> genresFromDB = await dao.getFirstGenre();
 
-          if (genreFromDB.isNotEmpty) {
+          if (genresFromDB.isNotEmpty) {
             DataState genres = await genreRepo.getData();
             expect(genres, isA<DataSuccess>());
           } else {

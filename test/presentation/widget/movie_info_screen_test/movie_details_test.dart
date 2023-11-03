@@ -9,7 +9,7 @@ void main() {
   const String movieReleaseDate = '03-09-2008';
   const double movieVoteAverage = 8.9;
   Widget buildWidget() {
-    return MaterialApp(
+    return const MaterialApp(
       home: MovieDetails(
         movieTitle: movieTitle,
         movieReleaseDate: movieReleaseDate,

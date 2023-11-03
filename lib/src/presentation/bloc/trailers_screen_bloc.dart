@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import '../../core/bloc/i_bloc.dart';
+import '../../core/util/api_constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/app_event.dart';
-import '../../domain/usecase/usecase_interface.dart';
+import '../../domain/usecase/implementation/movies_use_case.dart';
 
 class TrailersBloc extends IBloc {
-  IUseCase useCase;
+  String categoryEndpointSelectedToShow = ApiConstants.upComingMoviesEndPoint;
+  MoviesUseCase useCase;
 
   TrailersBloc({
     required this.useCase,
@@ -27,6 +29,7 @@ class TrailersBloc extends IBloc {
   }
 
   void fetchAllTrailers() async {
+    useCase.categoryEndPoint = categoryEndpointSelectedToShow;
     DataState dataState = await useCase.call();
     if (dataState is DataSuccess) {
       _moviesFetcher.sink.add(

@@ -14,11 +14,11 @@ class TrailerCard extends StatelessWidget {
   static const double generalContainerMarginTop = 10;
   static const double movieTitleFontSize = 20;
   static const double sizedBoxHeight = 10;
-  static const double movieImageHeight = 300;
+  static const double movieImageHeight = 353;
   static const double movieImageBlurSigmaX = 1.7;
   static const double movieImageBlurSigmaY = 2;
   static const double playIconSize = 100;
-  static const double playIconHeightFactor = 2.9;
+  static const double playIconHeightFactor = 3.5;
   final Movie movie;
 
   const TrailerCard({

@@ -5,18 +5,15 @@ import '../usecase_interface.dart';
 
 class MoviesUseCase extends IUseCase<Future<DataState<List<Movie>>>> {
   IMovieRepository movieRepository;
-  String _categoryEndPoint = '';
+  String categoryEndPoint;
 
   MoviesUseCase({
     required this.movieRepository,
+    required this.categoryEndPoint,
   });
-
-  set categoryEndPoint(String value) {
-    _categoryEndPoint = value;
-  }
 
   @override
   Future<DataState<List<Movie>>> call() async {
-    return await movieRepository.getData(_categoryEndPoint);
+    return await movieRepository.getData(categoryEndPoint);
   }
 }

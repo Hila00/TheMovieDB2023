@@ -10,7 +10,7 @@ void main() {
     (WidgetTester tester) async {
       const String movieOverview = 'Overview';
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: MovieOverview(overview: movieOverview),
         ),
       );
