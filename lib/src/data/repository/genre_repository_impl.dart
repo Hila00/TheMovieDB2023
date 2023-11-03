@@ -11,16 +11,16 @@ import '../model/genre_model.dart';
 
 class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
   IApiGenreService genresService;
-  AppDatabase databaseRepository;
+  AppDatabase database;
 
   GenreRepositoryImpl({
     required this.genresService,
-    required this.databaseRepository,
+    required this.database,
   });
 
   @override
   Future<DataState<List<Genre>>> getData() async {
-    GenreDao genreDao = databaseRepository.genreDao;
+    GenreDao genreDao = database.genreDao;
     DataState dataState = await genresService.fetchGenresFromApi();
 
     if (dataState is DataSuccess) {
@@ -37,7 +37,7 @@ class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
   }
 
   Future<DataState<List<Genre>>> _getDatabaseState() async {
-    GenreDao genreDao = databaseRepository.genreDao;
+    GenreDao genreDao = database.genreDao;
     List<Genre> genresFromDB = await genreDao.getAllGenres();
     if (genresFromDB.isNotEmpty) {
       return DataSuccess(

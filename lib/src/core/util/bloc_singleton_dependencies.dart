@@ -25,7 +25,7 @@ class BlocSingletonDependencies {
     moviesUseCase = MoviesUseCase(
       movieRepository: MovieRepositoryImpl(
         movieService: ApiMovieService(),
-        databaseInstance: database,
+        database: database,
       ),
       categoryEndPoint: ApiConstants.upComingMoviesEndPoint,
     );
@@ -37,7 +37,7 @@ class BlocSingletonDependencies {
       genresUseCase: GenresUseCase(
         genreRepository: GenreRepositoryImpl(
           genresService: ApiGenresService(),
-          databaseRepository: database,
+          database: database,
         ),
       ),
     );

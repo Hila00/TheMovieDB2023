@@ -9,16 +9,16 @@ import '../model/movie_model.dart';
 
 class MovieRepositoryImpl implements IMovieRepository<DataState<List<Movie>>> {
   IApiMovieService movieService;
-  AppDatabase databaseInstance;
+  AppDatabase database;
 
   MovieRepositoryImpl({
     required this.movieService,
-    required this.databaseInstance,
+    required this.database,
   });
 
   @override
   Future<DataState<List<Movie>>> getData(String endPoint) async {
-    MovieDao movieDao = databaseInstance.movieDao;
+    MovieDao movieDao = database.movieDao;
     DataState dataState = await movieService.fetchMoviesFromApi(endPoint);
 
     if (dataState is DataSuccess) {
@@ -35,7 +35,7 @@ class MovieRepositoryImpl implements IMovieRepository<DataState<List<Movie>>> {
   }
 
   Future<DataState<List<Movie>>> _getDatabaseState() async {
-    MovieDao movieDao = databaseInstance.movieDao;
+    MovieDao movieDao = database.movieDao;
     List<Movie> moviesFromDb = await movieDao.getAllMovies();
 
     if (moviesFromDb.isNotEmpty) {

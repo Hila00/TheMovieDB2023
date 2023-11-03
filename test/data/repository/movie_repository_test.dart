@@ -26,7 +26,7 @@ void main() {
         .build();
     movieRepo = MovieRepositoryImpl(
       movieService: mockMovieService,
-      databaseInstance: databaseInstance,
+      database: databaseInstance,
     );
   });
 

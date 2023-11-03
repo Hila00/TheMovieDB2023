@@ -27,7 +27,7 @@ void main() {
 
       genreRepo = GenreRepositoryImpl(
         genresService: mockedService,
-        databaseRepository: databaseInstance,
+        database: databaseInstance,
       );
     },
   );
