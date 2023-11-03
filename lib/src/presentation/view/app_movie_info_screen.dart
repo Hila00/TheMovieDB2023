@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:provider/provider.dart';
-
-import '../../core/util/bloc_singleton_dependencies.dart';
 import '../../core/util/constants.dart';
 import '../../domain/entity/movie.dart';
 import '../widget/app_circular_progress_indicator.dart';
@@ -51,11 +48,8 @@ class AppMovieInfo extends StatelessWidget {
               ),
             ),
             const RelatedGenresTitle(),
-            Provider(
-              create: (_) => BlocSingletonDependencies.genresBloc,
-              child: GenresList(
-                genresIds: movie.genreIds,
-              ),
+            GenresList(
+              genresIds: movie.genreIds,
             ),
             const SizedBox(
               height: sizedBoxHeight,

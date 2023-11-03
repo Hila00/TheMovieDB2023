@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
 import 'src/config/route/app_routes.dart';
-import 'src/core/util/bloc_singleton_dependencies.dart';
 import 'src/core/util/constants.dart';
 import 'src/presentation/view/app_home_screen.dart';
 import 'src/presentation/view/app_trailers_screen.dart';
@@ -30,14 +27,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: AppRoutes.homeScreenRoute,
       routes: {
-        AppRoutes.homeScreenRoute: (BuildContext context) => Provider(
-              create: (_) => BlocSingletonDependencies.moviesBloc,
-              child: const HomeScreen(),
-            ),
-        AppRoutes.trailersRoute: (BuildContext context) => Provider(
-              create: (_) => BlocSingletonDependencies.trailersBloc,
-              child: const AppTrailersScreen(),
-            ),
+        AppRoutes.homeScreenRoute: (BuildContext context) => const HomeScreen(),
+        AppRoutes.trailersRoute: (BuildContext context) =>
+            const AppTrailersScreen(),
       },
     );
   }

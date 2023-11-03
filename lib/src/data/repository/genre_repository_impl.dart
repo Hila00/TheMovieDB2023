@@ -5,13 +5,13 @@ import '../../core/util/data_state.dart';
 import '../../domain/entity/genre.dart';
 import '../../domain/repository/i_genre_repository.dart';
 import '../datasource/local/DAOs/genre_dao.dart';
+import '../datasource/local/movie_database.dart';
 import '../datasource/remote/i_api_genres_service.dart';
 import '../model/genre_model.dart';
-import 'database_repository.dart';
 
 class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
   IApiGenreService genresService;
-  DatabaseRepository databaseRepository;
+  AppDatabase databaseRepository;
 
   GenreRepositoryImpl({
     required this.genresService,
@@ -20,7 +20,7 @@ class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
 
   @override
   Future<DataState<List<Genre>>> getData() async {
-    GenreDao genreDao = await databaseRepository.getGenreDao();
+    GenreDao genreDao = databaseRepository.genreDao;
     DataState dataState = await genresService.fetchGenresFromApi();
 
     if (dataState is DataSuccess) {
@@ -37,7 +37,7 @@ class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
   }
 
   Future<DataState<List<Genre>>> _getDatabaseState() async {
-    GenreDao genreDao = await databaseRepository.getGenreDao();
+    GenreDao genreDao = databaseRepository.genreDao;
     List<Genre> genresFromDB = await genreDao.getAllGenres();
     if (genresFromDB.isNotEmpty) {
       return DataSuccess(

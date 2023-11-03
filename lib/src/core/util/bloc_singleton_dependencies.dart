@@ -1,6 +1,6 @@
+import '../../data/datasource/local/movie_database.dart';
 import '../../data/datasource/remote/api_genres_service.dart';
 import '../../data/datasource/remote/api_movie_service.dart';
-import '../../data/repository/database_repository.dart';
 import '../../data/repository/genre_repository_impl.dart';
 import '../../data/repository/movie_repository_impl.dart';
 import '../../domain/usecase/implementation/genres_use_case.dart';
@@ -9,34 +9,41 @@ import '../../presentation/bloc/genres_bloc.dart';
 import '../../presentation/bloc/movies_bloc.dart';
 import '../../presentation/bloc/trailers_screen_bloc.dart';
 import 'api_constants.dart';
+import 'constants.dart';
 
 class BlocSingletonDependencies {
-  static DatabaseRepository dbRepo = DatabaseRepository();
+  late AppDatabase database;
+  late MoviesBloc moviesBloc;
+  late MoviesUseCase moviesUseCase;
+  late GenresBloc genresBloc;
+  late TrailersBloc trailersBloc;
 
-  static MoviesUseCase moviesUseCase = MoviesUseCase(
-    movieRepository: MovieRepositoryImpl(
-      movieService: ApiMovieService(),
-      databaseInstance: dbRepo,
-    ),
-    categoryEndPoint: ApiConstants.popularMoviesEndPoint,
-  );
+  Future<void> initialize() async {
+    database = await $FloorAppDatabase
+        .databaseBuilder(AppConstants.databaseAccessString)
+        .build();
+    moviesUseCase = MoviesUseCase(
+      movieRepository: MovieRepositoryImpl(
+        movieService: ApiMovieService(),
+        databaseInstance: database,
+      ),
+      categoryEndPoint: ApiConstants.upComingMoviesEndPoint,
+    );
 
-  static GenresUseCase genresUseCase = GenresUseCase(
-    genreRepository: GenreRepositoryImpl(
-      genresService: ApiGenresService(),
-      databaseRepository: dbRepo,
-    ),
-  );
+    moviesBloc = MoviesBloc(
+      moviesUseCase: moviesUseCase,
+    );
+    genresBloc = GenresBloc(
+      genresUseCase: GenresUseCase(
+        genreRepository: GenreRepositoryImpl(
+          genresService: ApiGenresService(),
+          databaseRepository: database,
+        ),
+      ),
+    );
 
-  static MoviesBloc moviesBloc = MoviesBloc(
-    moviesUseCase: moviesUseCase,
-  );
-
-  static TrailersBloc trailersBloc = TrailersBloc(
-    useCase: moviesUseCase,
-  );
-
-  static GenresBloc genresBloc = GenresBloc(
-    genresUseCase: genresUseCase,
-  );
+    trailersBloc = TrailersBloc(
+      useCase: moviesUseCase,
+    );
+  }
 }

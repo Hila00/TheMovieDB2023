@@ -2,10 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
+import 'package:the_movie_db_module2_part1/src/core/util/constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/DAOs/genre_dao.dart';
+import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_genres_service.dart';
-import 'package:the_movie_db_module2_part1/src/data/repository/database_repository.dart';
 import 'package:the_movie_db_module2_part1/src/data/repository/genre_repository_impl.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/genre.dart';
 import '../../mocks/genre_mocks.dart';
@@ -15,12 +16,15 @@ class MockApiGenresService extends Mock implements IApiGenreService {}
 void main() {
   late GenreRepositoryImpl genreRepo;
   late MockApiGenresService mockedService;
-  late DatabaseRepository databaseInstance;
+  late AppDatabase databaseInstance;
 
   setUp(
-    () {
+    () async {
       mockedService = MockApiGenresService();
-      databaseInstance = DatabaseRepository();
+      databaseInstance = await $FloorAppDatabase
+          .databaseBuilder(AppConstants.databaseAccessString)
+          .build();
+
       genreRepo = GenreRepositoryImpl(
         genresService: mockedService,
         databaseRepository: databaseInstance,
@@ -71,7 +75,7 @@ void main() {
             ),
           );
 
-          GenreDao dao = await databaseInstance.getGenreDao();
+          GenreDao dao = databaseInstance.genreDao;
           List<Genre> genresFromDB = await dao.getFirstGenre();
 
           if (genresFromDB.isNotEmpty) {
@@ -96,7 +100,7 @@ void main() {
               ),
             ),
           );
-          GenreDao dao = await databaseInstance.getGenreDao();
+          GenreDao dao = databaseInstance.genreDao;
           List<Genre> genresFromDB = await dao.getFirstGenre();
 
           if (genresFromDB.isNotEmpty) {

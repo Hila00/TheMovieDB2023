@@ -2,10 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
+import 'package:the_movie_db_module2_part1/src/core/util/constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/local/DAOs/movie_dao.dart';
+import 'package:the_movie_db_module2_part1/src/data/datasource/local/movie_database.dart';
 import 'package:the_movie_db_module2_part1/src/data/datasource/remote/i_api_movies_service.dart';
-import 'package:the_movie_db_module2_part1/src/data/repository/database_repository.dart';
 import 'package:the_movie_db_module2_part1/src/data/repository/movie_repository_impl.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
 import '../../mocks/movie_mocks.dart';
@@ -16,11 +17,13 @@ void main() {
   const mockedEndpoint = 'mocked_endpoint';
   late MovieRepositoryImpl movieRepo;
   late MockApiMovieService mockMovieService;
-  late DatabaseRepository databaseInstance;
+  late AppDatabase databaseInstance;
 
-  setUp(() {
+  setUp(() async {
     mockMovieService = MockApiMovieService();
-    databaseInstance = DatabaseRepository();
+    databaseInstance = await $FloorAppDatabase
+        .databaseBuilder(AppConstants.databaseAccessString)
+        .build();
     movieRepo = MovieRepositoryImpl(
       movieService: mockMovieService,
       databaseInstance: databaseInstance,
@@ -75,7 +78,7 @@ void main() {
             ),
           );
 
-          MovieDao dao = await databaseInstance.getMovieDao();
+          MovieDao dao = databaseInstance.movieDao;
           List<Movie> movieFromDb = await dao.getFirstMovie();
 
           if (movieFromDb.isNotEmpty) {
@@ -101,7 +104,7 @@ void main() {
               ),
             ),
           );
-          MovieDao dao = await databaseInstance.getMovieDao();
+          MovieDao dao = databaseInstance.movieDao;
           List<Movie> movieFromDb = await dao.getFirstMovie();
 
           if (movieFromDb.isNotEmpty) {
