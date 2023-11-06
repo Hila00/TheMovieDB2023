@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+
 import '../custom_text_widget.dart';
 
 class CategoryTitle extends StatelessWidget {
   final String title;
   final double titleFontSize;
   final double arrowIconSize;
-  static const double defaultTitleFontSize = 27;
+  static const double defaultTitleFontSize = 30;
   static const double titleRowTopMargin = 20;
   static const double titleRowBottomMargin = 1;
   static const double titleRowLeftPadding = 10;
   static const double iconLeftMargin = 5;
-  static const double defaultArrowIconSize = 24;
+  static const double defaultArrowIconSize = 27;
   static const double tapToDetailsLeftMargin = 12;
   static const String tapToDetailsTitle = 'Tap movie to see details';
   static const double tapToDetailsTitleSize = 17;

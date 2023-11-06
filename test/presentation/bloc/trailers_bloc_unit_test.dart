@@ -1,5 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/app_event.dart';
@@ -7,7 +10,6 @@ import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/bloc/trailers_screen_bloc.dart';
 import '../../mocks/movie_mocks.dart';
 import 'movies_bloc_unit_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   late TrailersBloc trailersBloc;
@@ -48,7 +50,11 @@ void main() {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataState,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
+            ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = trailersBloc.allTrailers.listen(
@@ -67,9 +73,11 @@ void main() {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataError(
-              Exception(
-                ApiConstants.errorMessage,
+            (_) => Future.value(
+              DataError<List<Movie>>(
+                Exception(
+                  ApiConstants.errorMessage,
+                ),
               ),
             ),
           );
@@ -91,8 +99,10 @@ void main() {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataSuccess<List<Movie>>(
-              MovieMocks.mockedMovieList,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
             ),
           );
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/util/api_constants.dart';
+
+import 'package:provider/provider.dart';
+
 import '../../core/util/error_message_widget.dart';
-import '../../data/datasource/remote/api_movie_service.dart';
-import '../../data/repository/movie_repository_impl.dart';
 import '../../domain/entity/app_event.dart';
 import '../../domain/entity/movie.dart';
-import '../../domain/usecase/implementation/movies_use_case.dart';
 import '../bloc/trailers_screen_bloc.dart';
 import '../widget/app_circular_progress_indicator.dart';
 import '../widget/custom_text_widget.dart';
@@ -20,17 +19,8 @@ class AppTrailersScreen extends StatefulWidget {
   static const subtitle = 'Scroll down to see others!';
   static const double subtitleSize = 25;
   static const double arrowDownSize = 40;
-  final TrailersBloc bloc = TrailersBloc(
-    useCase: MoviesUseCase(
-      movieRepository: MovieRepositoryImpl(
-        movieService: ApiMovieService(
-          endPoint: ApiConstants.nowPlayingMoviesEndPoint,
-        ),
-      ),
-    ),
-  );
 
-  AppTrailersScreen({
+  const AppTrailersScreen({
     super.key,
   });
 
@@ -42,17 +32,17 @@ class _AppTrailersScreenState extends State<AppTrailersScreen> {
   @override
   void initState() {
     super.initState();
-    widget.bloc.fetchAllTrailers();
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.bloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    TrailersBloc bloc = Provider.of<TrailersBloc>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -94,11 +84,15 @@ class _AppTrailersScreenState extends State<AppTrailersScreen> {
             ),
             Flexible(
               child: StreamBuilder(
-                stream: widget.bloc.allTrailers,
+                stream: bloc.allTrailers,
                 builder: (
                   BuildContext context,
                   AsyncSnapshot<AppEvent> snapshot,
                 ) {
+                  if (snapshot.data == null) {
+                    bloc.fetchAllTrailers();
+                  }
+
                   if (snapshot.data?.status == Status.success) {
                     List<Movie> movies = snapshot.data?.data as List<Movie>;
                     return PageView.builder(

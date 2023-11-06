@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
+import '../../../core/util/constants.dart';
 import '../../../domain/entity/app_event.dart';
+import '../../../domain/entity/genre.dart';
 import '../../bloc/genres_bloc.dart';
 import '../app_circular_progress_indicator.dart';
 import '../custom_text_widget.dart';
-import '../../../domain/entity/genre.dart';
-import '../../../core/util/constants.dart';
 
 class GenresList extends StatefulWidget {
   static const double containerBorderRadius = 15;
@@ -12,11 +15,9 @@ class GenresList extends StatefulWidget {
   static const double containerMargin = 6;
   static const double itemsFontSize = 15;
   static const String errorMessage = 'Error: failed to load genres';
-  final List<num> genresIds;
-  final GenresBloc bloc;
+  final List<int> genresIds;
 
   const GenresList({
-    required this.bloc,
     required this.genresIds,
     super.key,
   });
@@ -28,21 +29,23 @@ class GenresList extends StatefulWidget {
 class _GenresListState extends State<GenresList> {
   @override
   Widget build(BuildContext context) {
+    GenresBloc bloc = Provider.of<GenresBloc>(context);
+
     return StreamBuilder(
-      stream: widget.bloc.allGenres,
+      stream: bloc.allGenres,
       builder: (
         BuildContext context,
         AsyncSnapshot<AppEvent> snapshot,
       ) {
         if (snapshot.data == null) {
-          widget.bloc.fetchAllGenres();
+          bloc.fetchAllGenres();
         }
 
         if (snapshot.data?.status == Status.success) {
           AppEvent? dataSuccess = snapshot.data;
           List<Genre> genres = dataSuccess?.data;
           List<String> movieRelatedGenres =
-              widget.bloc.getRelatedGenres(genres, widget.genresIds);
+              bloc.getRelatedGenres(genres, widget.genresIds);
 
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,

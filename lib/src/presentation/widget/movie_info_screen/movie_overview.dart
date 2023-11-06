@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import '../custom_text_widget.dart';
+
 import '../../../core/util/constants.dart';
+import '../custom_text_widget.dart';
 
 class MovieOverview extends StatelessWidget {
   static const double overviewFontSize = 18;
   static const double containerBorderRadius = 30;
   static const double containerMargin = 10;
   static const double containerPadding = 15;
-  String overview;
+  final String overview;
 
-  MovieOverview({
+  const MovieOverview({
     required this.overview,
     super.key,
   });

@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart';
+
 import '../../../core/util/api_constants.dart';
 import '../../../core/util/data_state.dart';
 import '../../model/genre_model.dart';
-import 'i_api_service.dart';
+import 'i_api_genres_service.dart';
 
-class ApiGenresService extends IApiService {
+class ApiGenresService extends IApiGenreService {
   @override
-  Future<DataState<List<GenreModel>>> fetchDataFromApi() async {
+  Future fetchGenresFromApi() async {
     try {
       final Response response = await get(
         Uri.parse(ApiConstants.baseUrlForGenres),

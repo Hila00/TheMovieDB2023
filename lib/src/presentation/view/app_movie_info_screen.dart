@@ -1,31 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/util/constants.dart';
-import '../../data/datasource/remote/api_genres_service.dart';
-import '../../data/repository/genre_repository_impl.dart';
 import '../../domain/entity/movie.dart';
-import '../../domain/usecase/implementation/genres_use_case.dart';
-import '../bloc/genres_bloc.dart';
 import '../widget/app_circular_progress_indicator.dart';
 import '../widget/app_drawer.dart';
-import '../widget/movie_info_screen/genres_list_widget.dart';
 import '../widget/app_header.dart';
-import '../widget/movie_info_screen/related_genres_title.dart';
-import '../widget/movie_info_screen/movie_overview.dart';
+import '../widget/movie_info_screen/genres_list_widget.dart';
 import '../widget/movie_info_screen/movie_info_container.dart';
+import '../widget/movie_info_screen/movie_overview.dart';
+import '../widget/movie_info_screen/related_genres_title.dart';
 
 class AppMovieInfo extends StatelessWidget {
   static const double sizedBoxHeight = 10;
-  final GenresBloc genresBloc = GenresBloc(
-    genresUseCase: GenresUseCase(
-      genreRepository: GenreRepositoryImpl(
-        genresService: ApiGenresService(),
-      ),
-    ),
-  );
   final Movie movie;
 
-  AppMovieInfo({
+  const AppMovieInfo({
     required this.movie,
     super.key,
   });
@@ -59,7 +49,6 @@ class AppMovieInfo extends StatelessWidget {
             ),
             const RelatedGenresTitle(),
             GenresList(
-              bloc: genresBloc,
               genresIds: movie.genreIds,
             ),
             const SizedBox(

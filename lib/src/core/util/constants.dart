@@ -7,4 +7,6 @@ class AppConstants {
   static const String appTitle = 'The Movie DB';
   static const String errorMessage =
       'Try later, an error has occurred. Check your internet connection';
+  static const String databaseError = 'The database has not registries';
+  static const String databaseAccessString = 'app_database.db';
 }

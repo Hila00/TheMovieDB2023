@@ -22,7 +22,7 @@ class MovieModel extends Movie {
     return MovieModel(
       adult: json['adult'],
       backdropPath: json['backdrop_path'],
-      genreIds: json['genre_ids'].cast<num>(),
+      genreIds: json['genre_ids'].cast<int>(),
       id: json['id'],
       originalLanguage: json['original_language'],
       originalTitle: json['original_title'],

@@ -1,23 +1,22 @@
 import 'dart:async';
+
 import '../../core/bloc/i_movies_bloc.dart';
+import '../../core/util/api_constants.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/app_event.dart';
-import '../../domain/usecase/usecase_interface.dart';
+import '../../domain/usecase/implementation/movies_use_case.dart';
 
 class MoviesBloc extends IMoviesBloc {
-  IUseCase popularMoviesUseCase;
-  IUseCase topRatedMoviesUseCase;
-  IUseCase nowPlayingMoviesUseCase;
+  MoviesUseCase moviesUseCase;
 
   MoviesBloc({
-    required this.popularMoviesUseCase,
-    required this.topRatedMoviesUseCase,
-    required this.nowPlayingMoviesUseCase,
+    required this.moviesUseCase,
   });
 
   final _topRatedMoviesController = StreamController<AppEvent>.broadcast();
   final _popularMoviesController = StreamController<AppEvent>.broadcast();
   final _nowPlayingMoviesController = StreamController<AppEvent>.broadcast();
+  final _savedMoviesFromDbController = StreamController<AppEvent>.broadcast();
 
   Stream<AppEvent> get allTopRatedMovies => _topRatedMoviesController.stream;
 
@@ -26,11 +25,15 @@ class MoviesBloc extends IMoviesBloc {
   Stream<AppEvent> get allNowPlayingMovies =>
       _nowPlayingMoviesController.stream;
 
+  Stream<AppEvent> get allSavedMoviesFromDb =>
+      _savedMoviesFromDbController.stream;
+
   @override
   void dispose() {
     _topRatedMoviesController.close();
     _popularMoviesController.close();
     _nowPlayingMoviesController.close();
+    _savedMoviesFromDbController.close();
   }
 
   @override
@@ -39,67 +42,53 @@ class MoviesBloc extends IMoviesBloc {
   }
 
   @override
-  void fetchNowPlayingMovies() async {
-    DataState nowPlayingMoviesState = await nowPlayingMoviesUseCase.call();
-
-    if (nowPlayingMoviesState is DataSuccess) {
-      _nowPlayingMoviesController.sink.add(
-        AppEvent(
-          status: nowPlayingMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: nowPlayingMoviesState.data,
-        ),
-      );
-    } else {
-      _nowPlayingMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
-      );
+  void fetchMovies(String endPoint) async {
+    switch (endPoint) {
+      case ApiConstants.topRatedMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint = ApiConstants.topRatedMoviesEndPoint;
+          DataState topRatedMoviesState = await moviesUseCase.call();
+          _topRatedMoviesController.sink.add(
+            _getMoviesStatusOnEvent(topRatedMoviesState),
+          );
+        }
+      case ApiConstants.popularMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint = ApiConstants.popularMoviesEndPoint;
+          DataState popularMoviesState = await moviesUseCase.call();
+          _popularMoviesController.sink.add(
+            _getMoviesStatusOnEvent(popularMoviesState),
+          );
+        }
+      case ApiConstants.nowPlayingMoviesEndPoint:
+        {
+          moviesUseCase.categoryEndPoint =
+              ApiConstants.nowPlayingMoviesEndPoint;
+          DataState nowPlayingMoviesState = await moviesUseCase.call();
+          _nowPlayingMoviesController.sink.add(
+            _getMoviesStatusOnEvent(nowPlayingMoviesState),
+          );
+        }
+      default:
+        {
+          moviesUseCase.categoryEndPoint = '';
+          DataState savedMoviesState = await moviesUseCase.call();
+          _savedMoviesFromDbController.sink.add(
+            _getMoviesStatusOnEvent(savedMoviesState),
+          );
+        }
     }
   }
 
-  @override
-  void fetchPopularMovies() async {
-    DataState popularMoviesState = await popularMoviesUseCase.call();
-
-    if (popularMoviesState is DataSuccess) {
-      _popularMoviesController.sink.add(
-        AppEvent(
-          status: popularMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: popularMoviesState.data,
-        ),
+  AppEvent _getMoviesStatusOnEvent(DataState moviesDataState) {
+    if (moviesDataState is DataSuccess) {
+      return AppEvent(
+        status: moviesDataState.data.isNotEmpty ? Status.success : Status.empty,
+        data: moviesDataState.data,
       );
     } else {
-      _popularMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
-      );
-    }
-  }
-
-  @override
-  void fetchTopRatedMovies() async {
-    DataState topRatedMoviesState = await topRatedMoviesUseCase.call();
-
-    if (topRatedMoviesState is DataSuccess) {
-      _topRatedMoviesController.sink.add(
-        AppEvent(
-          status: topRatedMoviesState.data.isNotEmpty
-              ? Status.success
-              : Status.empty,
-          data: topRatedMoviesState.data,
-        ),
-      );
-    } else {
-      _topRatedMoviesController.sink.add(
-        AppEvent(
-          status: Status.error,
-        ),
+      return AppEvent(
+        status: Status.error,
       );
     }
   }

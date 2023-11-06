@@ -1,18 +1,20 @@
 import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/core/util/data_state.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/app_event.dart';
 import 'package:the_movie_db_module2_part1/src/domain/entity/movie.dart';
-import 'package:the_movie_db_module2_part1/src/domain/usecase/usecase_interface.dart';
+import 'package:the_movie_db_module2_part1/src/domain/usecase/implementation/movies_use_case.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/bloc/movies_bloc.dart';
-import 'package:mocktail/mocktail.dart';
-
 import '../../mocks/movie_mocks.dart';
 
-class MockedMoviesUseCase extends Mock implements IUseCase {}
+class MockedMoviesUseCase extends Mock implements MoviesUseCase {}
 
 void main() async {
+  const mockedEndpoint = 'mocked_endpoint';
   late MoviesBloc moviesBloc;
   late MockedMoviesUseCase mockedUseCase;
 
@@ -20,9 +22,7 @@ void main() async {
     () {
       mockedUseCase = MockedMoviesUseCase();
       moviesBloc = MoviesBloc(
-        popularMoviesUseCase: mockedUseCase,
-        topRatedMoviesUseCase: mockedUseCase,
-        nowPlayingMoviesUseCase: mockedUseCase,
+        moviesUseCase: mockedUseCase,
       );
     },
   );
@@ -31,7 +31,7 @@ void main() async {
     'Movies BLoC testing',
     () {
       test(
-        'fetch() methods are properly calling UseCase call() method',
+        'fetchMovies() method is properly calling UseCase call() method',
         () async {
           when(
             () => mockedUseCase.call(),
@@ -41,10 +41,8 @@ void main() async {
             ),
           );
 
-          moviesBloc.fetchNowPlayingMovies();
-          moviesBloc.fetchPopularMovies();
-          moviesBloc.fetchTopRatedMovies();
-          verify(() => mockedUseCase.call()).called(3);
+          moviesBloc.fetchMovies(mockedEndpoint);
+          verify(() => mockedUseCase.call()).called(1);
         },
       );
 
@@ -55,7 +53,11 @@ void main() async {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataState,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
+            ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allPopularMovies.listen(
@@ -74,7 +76,11 @@ void main() async {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataState,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
+            ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allTopRatedMovies.listen(
@@ -93,7 +99,11 @@ void main() async {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataState,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
+            ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allNowPlayingMovies.listen(
@@ -112,9 +122,11 @@ void main() async {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataError(
-              Exception(
-                ApiConstants.errorMessage,
+            (_) => Future.value(
+              DataError<List<Movie>>(
+                Exception(
+                  ApiConstants.errorMessage,
+                ),
               ),
             ),
           );
@@ -131,20 +143,22 @@ void main() async {
 
       test(
         'movieBloc receives a DataError from use case,'
-            'topRatedMovies stream should stream an AppEvent error',
-            () async {
+        'topRatedMovies stream should stream an AppEvent error',
+        () async {
           when(
-                () => mockedUseCase.call(),
+            () => mockedUseCase.call(),
           ).thenAnswer(
-                (_) => DataError(
-              Exception(
-                ApiConstants.errorMessage,
+            (_) => Future.value(
+              DataError<List<Movie>>(
+                Exception(
+                  ApiConstants.errorMessage,
+                ),
               ),
             ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allTopRatedMovies.listen(
-                (movieState) {
+            (movieState) {
               expect(movieState, isA<AppEvent>);
               expect(movieState.status, Status.error);
             },
@@ -155,20 +169,22 @@ void main() async {
 
       test(
         'movieBloc receives a DataError from use case,'
-            'nowPlayingMovies stream should stream an AppEvent error',
-            () async {
+        'nowPlayingMovies stream should stream an AppEvent error',
+        () async {
           when(
-                () => mockedUseCase.call(),
+            () => mockedUseCase.call(),
           ).thenAnswer(
-                (_) => DataError(
-              Exception(
-                ApiConstants.errorMessage,
+            (_) => Future.value(
+              DataError<List<Movie>>(
+                Exception(
+                  ApiConstants.errorMessage,
+                ),
               ),
             ),
           );
           StreamSubscription<AppEvent> subscription;
           subscription = moviesBloc.allNowPlayingMovies.listen(
-                (movieState) {
+            (movieState) {
               expect(movieState, isA<AppEvent>);
               expect(movieState.status, Status.error);
             },
@@ -184,8 +200,10 @@ void main() async {
           when(
             () => mockedUseCase.call(),
           ).thenAnswer(
-            (_) => DataSuccess<List<Movie>>(
-              MovieMocks.mockedMovieList,
+            (_) => Future.value(
+              DataSuccess<List<Movie>>(
+                MovieMocks.mockedMovieList,
+              ),
             ),
           );
           StreamSubscription<AppEvent> subscription;

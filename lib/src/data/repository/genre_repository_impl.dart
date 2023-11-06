@@ -1,34 +1,51 @@
 import 'dart:core';
-import '../../core/util/api_constants.dart';
-import '../../domain/entity/genre.dart';
-import '../../domain/repository/i_repository.dart';
-import '../datasource/remote/i_api_service.dart';
+
+import '../../core/util/constants.dart';
 import '../../core/util/data_state.dart';
+import '../../domain/entity/genre.dart';
+import '../../domain/repository/i_genre_repository.dart';
+import '../datasource/local/DAOs/genre_dao.dart';
+import '../datasource/local/movie_database.dart';
+import '../datasource/remote/i_api_genres_service.dart';
 import '../model/genre_model.dart';
 
-class GenreRepositoryImpl implements IRepository<DataState<List<Genre>>> {
-  IApiService genresService;
+class GenreRepositoryImpl implements IGenreRepository<DataState<List<Genre>>> {
+  IApiGenreService genresService;
+  AppDatabase database;
 
   GenreRepositoryImpl({
     required this.genresService,
+    required this.database,
   });
 
   @override
   Future<DataState<List<Genre>>> getData() async {
-    DataState dataState = await genresService.fetchDataFromApi();
+    GenreDao genreDao = database.genreDao;
+    DataState dataState = await genresService.fetchGenresFromApi();
+
     if (dataState is DataSuccess) {
       List<GenreModel> genreModel = dataState.data;
-
       if (genreModel.isNotEmpty) {
+        for (GenreModel genre in genreModel) {
+          await genreDao.insertGenre(genre);
+        }
         return DataSuccess<List<Genre>>(genreModel);
-      } else {
-        return DataError(
-          Exception(ApiConstants.errorMessage),
-        );
       }
+    }
+
+    return _getDatabaseState();
+  }
+
+  Future<DataState<List<Genre>>> _getDatabaseState() async {
+    GenreDao genreDao = database.genreDao;
+    List<Genre> genresFromDB = await genreDao.getAllGenres();
+    if (genresFromDB.isNotEmpty) {
+      return DataSuccess(
+        genresFromDB,
+      );
     } else {
       return DataError(
-        Exception(dataState.error),
+        Exception(AppConstants.databaseError),
       );
     }
   }

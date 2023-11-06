@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:the_movie_db_module2_part1/src/core/util/api_constants.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/widget/movie_info_screen/movie_poster.dart';
 
@@ -12,7 +14,7 @@ void main() {
       const double posterWidth = 150;
       const double posterHeight = 200;
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: MoviePoster(
             posterImageUrl: posterUrl,
             posterImageWidth: posterWidth,

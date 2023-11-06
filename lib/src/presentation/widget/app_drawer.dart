@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../config/route/app_routes.dart';
 import '../../core/util/constants.dart';
 import 'custom_text_widget.dart';
@@ -6,7 +7,7 @@ import 'custom_text_widget.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
-  static const double drawerHeaderHeight = 100;
+  static const double drawerHeaderHeight = 150;
   static const double headerIconSize = 30;
   static const String drawerTitle = 'Welcome back user!';
   static const double drawerHeaderFontSize = 25;
@@ -40,14 +41,16 @@ class AppDrawer extends StatelessWidget {
                           size: headerIconSize,
                           color: Colors.white,
                         ),
-                        Text(
-                          drawerTitle,
-                          style: TextStyle(
-                            color: Color(
-                              AppConstants.appFontColor,
+                        Flexible(
+                          child: Text(
+                            drawerTitle,
+                            style: TextStyle(
+                              color: Color(
+                                AppConstants.appFontColor,
+                              ),
+                              fontSize: drawerHeaderFontSize,
+                              fontWeight: FontWeight.bold,
                             ),
-                            fontSize: drawerHeaderFontSize,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],

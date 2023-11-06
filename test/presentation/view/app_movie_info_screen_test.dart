@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:the_movie_db_module2_part1/src/presentation/view/app_movie_info_screen.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/widget/movie_info_screen/movie_info_container.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/widget/movie_info_screen/movie_overview.dart';
 import 'package:the_movie_db_module2_part1/src/presentation/widget/movie_info_screen/related_genres_title.dart';
-
 import '../../mocks/movie_mocks.dart';
 
 void main() {
