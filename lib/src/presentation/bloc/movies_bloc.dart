@@ -16,7 +16,6 @@ class MoviesBloc extends IMoviesBloc {
   final _topRatedMoviesController = StreamController<AppEvent>.broadcast();
   final _popularMoviesController = StreamController<AppEvent>.broadcast();
   final _nowPlayingMoviesController = StreamController<AppEvent>.broadcast();
-  final _savedMoviesFromDbController = StreamController<AppEvent>.broadcast();
 
   Stream<AppEvent> get allTopRatedMovies => _topRatedMoviesController.stream;
 
@@ -25,15 +24,11 @@ class MoviesBloc extends IMoviesBloc {
   Stream<AppEvent> get allNowPlayingMovies =>
       _nowPlayingMoviesController.stream;
 
-  Stream<AppEvent> get allSavedMoviesFromDb =>
-      _savedMoviesFromDbController.stream;
-
   @override
   void dispose() {
     _topRatedMoviesController.close();
     _popularMoviesController.close();
     _nowPlayingMoviesController.close();
-    _savedMoviesFromDbController.close();
   }
 
   @override
@@ -67,14 +62,6 @@ class MoviesBloc extends IMoviesBloc {
           DataState nowPlayingMoviesState = await moviesUseCase.call();
           _nowPlayingMoviesController.sink.add(
             _getMoviesStatusOnEvent(nowPlayingMoviesState),
-          );
-        }
-      default:
-        {
-          moviesUseCase.categoryEndPoint = '';
-          DataState savedMoviesState = await moviesUseCase.call();
-          _savedMoviesFromDbController.sink.add(
-            _getMoviesStatusOnEvent(savedMoviesState),
           );
         }
     }

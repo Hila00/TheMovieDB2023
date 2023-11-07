@@ -13,6 +13,7 @@ class AppDrawer extends StatelessWidget {
   static const double drawerHeaderFontSize = 25;
   static const String homeScreenTileName = 'Home page';
   static const String trailersScreenTileName = 'Trailers';
+  static const String favoritesScreenTileName = 'Favorites';
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +68,11 @@ class AppDrawer extends StatelessWidget {
                 icon: Icons.movie,
                 title: trailersScreenTileName,
                 pointedRoute: AppRoutes.trailersRoute,
+              ),
+              DrawerListTile(
+                icon: Icons.favorite,
+                title: favoritesScreenTileName ,
+                pointedRoute: AppRoutes.favoritesRoute,
               ),
             ],
           ),

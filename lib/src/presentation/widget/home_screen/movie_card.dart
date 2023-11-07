@@ -7,8 +7,8 @@ import '../app_circular_progress_indicator.dart';
 
 class MovieCard extends StatelessWidget {
   final String moviePosterUrl;
-  static const double imageWidth = 150;
-  static const double imageHeight = 200;
+  static const double imageWidth = 170;
+  static const double imageHeight = 230;
 
   const MovieCard({
     required this.moviePosterUrl,

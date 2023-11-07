@@ -8,9 +8,10 @@ import '../../../domain/entity/movie.dart';
 import '../../view/app_movie_info_screen.dart';
 import '../app_circular_progress_indicator.dart';
 import 'category_title.dart';
+import 'favorites_button.dart';
 import 'movie_card.dart';
 
-class MovieListWidget extends StatelessWidget {
+class MovieListWidget extends StatefulWidget {
   static const double containerHeightDefaultValue = 300;
   static const double containerPadding = 10;
   static const int gridViewCrossAxisCount = 1;
@@ -18,7 +19,7 @@ class MovieListWidget extends StatelessWidget {
   final double listTitleFontSize;
   final double containerHeight;
   final String categoryTitle;
-  final IMoviesBloc moviesBloc;
+  final IMoviesBloc? moviesBloc;
   final Stream<AppEvent> moviesStream;
   final String endPoint;
 
@@ -26,22 +27,27 @@ class MovieListWidget extends StatelessWidget {
     this.containerHeight = containerHeightDefaultValue,
     this.listTitleFontSize = listTitleFontSizeDefaultValue,
     required this.endPoint,
-    required this.moviesBloc,
+    this.moviesBloc,
     required this.moviesStream,
     required this.categoryTitle,
     super.key,
   });
 
   @override
+  State<MovieListWidget> createState() => _MovieListWidgetState();
+}
+
+class _MovieListWidgetState extends State<MovieListWidget> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: moviesStream,
+      stream: widget.moviesStream,
       builder: (
         BuildContext context,
         AsyncSnapshot<AppEvent> snapshot,
       ) {
         if (snapshot.data == null) {
-          moviesBloc.fetchMovies(endPoint);
+          widget.moviesBloc?.fetchMovies(widget.endPoint);
         }
 
         if (snapshot.data?.status == Status.success) {
@@ -50,16 +56,16 @@ class MovieListWidget extends StatelessWidget {
           return Column(
             children: [
               CategoryTitle(
-                title: categoryTitle,
-                titleFontSize: listTitleFontSize,
+                title: widget.categoryTitle,
+                titleFontSize: widget.listTitleFontSize,
               ),
               Container(
-                height: containerHeight,
+                height: widget.containerHeight,
                 color: const Color(AppConstants.appItemsBackgroundColor),
-                padding: const EdgeInsets.all(containerPadding),
+                padding: const EdgeInsets.all(MovieListWidget.containerPadding),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: gridViewCrossAxisCount,
+                    crossAxisCount: MovieListWidget.gridViewCrossAxisCount,
                   ),
                   itemCount: movies.length,
                   scrollDirection: Axis.horizontal,
@@ -67,20 +73,25 @@ class MovieListWidget extends StatelessWidget {
                     BuildContext context,
                     int index,
                   ) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => AppMovieInfo(
-                              movie: movies[index],
-                            ),
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => AppMovieInfo(
+                                  movie: movies[index],
+                                ),
+                              ),
+                            );
+                          },
+                          child: MovieCard(
+                            moviePosterUrl: movies[index].posterUrl,
                           ),
-                        );
-                      },
-                      child: MovieCard(
-                        moviePosterUrl: movies[index].posterUrl,
-                      ),
+                        ),
+                        const FavoriteButton(),
+                      ],
                     );
                   },
                 ),
@@ -94,10 +105,10 @@ class MovieListWidget extends StatelessWidget {
           return Column(
             children: [
               const Center(
-               child: CustomCircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               ),
               SizedBox(
-                height: containerHeight,
+                height: widget.containerHeight,
               ),
             ],
           );

@@ -81,9 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       moviesStream: bloc.allPopularMovies,
                       moviesBloc: bloc,
                       endPoint: ApiConstants.popularMoviesEndPoint,
-                      containerHeight: HomeScreen.outstandingListHeight,
-                      listTitleFontSize:
-                          HomeScreen.outStandingTitleListFontSize,
                       categoryTitle: Categories.popular,
                     ),
                     MovieListWidget(

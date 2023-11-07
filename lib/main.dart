@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'src/core/util/notification_service.dart';
 
 import 'my_app.dart';
 import 'src/core/util/bloc_singleton_dependencies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
   BlocSingletonDependencies singletonDependencies = BlocSingletonDependencies();
   await singletonDependencies.initialize();
 

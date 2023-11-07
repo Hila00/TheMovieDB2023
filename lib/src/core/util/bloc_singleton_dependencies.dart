@@ -45,5 +45,6 @@ class BlocSingletonDependencies {
     trailersBloc = TrailersBloc(
       useCase: moviesUseCase,
     );
+
   }
 }
