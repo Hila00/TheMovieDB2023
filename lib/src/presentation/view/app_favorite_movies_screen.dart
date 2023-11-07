@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../config/route/app_routes.dart';
 import '../widget/app_drawer.dart';
 import '../widget/app_header.dart';
+import '../widget/favorites_screen/favorites_list.dart';
 
 class FavoriteMoviesScreen extends StatefulWidget {
   static const int refreshIndicatorTimeInSeconds = 0;
@@ -48,15 +49,10 @@ class _FavoriteMoviesScreenState extends State<FavoriteMoviesScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const AppHeader(),
-                // Column(
-                //   children: [
-                //     StreamBuilder(
-                //
-                //       },
-                //     ),
-                //   ],
-                // ),
+                AppHeader(),
+                FavoritesList(
+                  categoryTitle: 'Favorite movies',
+                ),
               ],
             ),
           ),

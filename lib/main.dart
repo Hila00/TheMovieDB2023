@@ -23,6 +23,9 @@ void main() async {
         Provider(
           create: (_) => singletonDependencies.trailersBloc,
         ),
+        Provider(
+          create: (_) => singletonDependencies.favoritesBloc,
+        ),
       ],
       child: const MyApp(),
     ),

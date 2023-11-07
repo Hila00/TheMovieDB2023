@@ -19,7 +19,7 @@ class MovieListWidget extends StatefulWidget {
   final double listTitleFontSize;
   final double containerHeight;
   final String categoryTitle;
-  final IMoviesBloc? moviesBloc;
+  final IMoviesBloc moviesBloc;
   final Stream<AppEvent> moviesStream;
   final String endPoint;
 
@@ -27,7 +27,7 @@ class MovieListWidget extends StatefulWidget {
     this.containerHeight = containerHeightDefaultValue,
     this.listTitleFontSize = listTitleFontSizeDefaultValue,
     required this.endPoint,
-    this.moviesBloc,
+    required this.moviesBloc,
     required this.moviesStream,
     required this.categoryTitle,
     super.key,
@@ -47,7 +47,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         AsyncSnapshot<AppEvent> snapshot,
       ) {
         if (snapshot.data == null) {
-          widget.moviesBloc?.fetchMovies(widget.endPoint);
+          widget.moviesBloc.fetchMovies(widget.endPoint);
         }
 
         if (snapshot.data?.status == Status.success) {
