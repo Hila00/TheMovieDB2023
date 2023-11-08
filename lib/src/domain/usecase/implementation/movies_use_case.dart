@@ -13,7 +13,7 @@ class MoviesUseCase extends IUseCase<Future<DataState<List<Movie>>>> {
   });
 
   @override
-  Future<DataState<List<Movie>>> call() async {
+  Future<DataState<List<Movie>>> call([Movie? movie]) async {
     return await movieRepository.getData(categoryEndPoint);
   }
 }

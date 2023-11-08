@@ -3,13 +3,18 @@ import 'dart:async';
 import '../../core/bloc/i_bloc.dart';
 import '../../core/util/data_state.dart';
 import '../../domain/entity/app_event.dart';
+import '../../domain/entity/movie.dart';
 import '../../domain/usecase/usecase_interface.dart';
 
 class FavoritesBloc extends IBloc {
   IUseCase favoriteMoviesUseCase;
+  IUseCase addFavoriteUseCase;
+  IUseCase removeFavoriteUseCase;
 
   FavoritesBloc({
     required this.favoriteMoviesUseCase,
+    required this.addFavoriteUseCase,
+    required this.removeFavoriteUseCase,
   });
 
   final _favoriteMoviesController = StreamController<AppEvent>.broadcast();
@@ -43,5 +48,13 @@ class FavoritesBloc extends IBloc {
         ),
       );
     }
+  }
+
+  void addMovieToFavorites(Movie favMovie) {
+    addFavoriteUseCase.call(favMovie);
+  }
+
+  void removeMovieFromFavorites(Movie movieToRemove) {
+    removeFavoriteUseCase.call(movieToRemove);
   }
 }

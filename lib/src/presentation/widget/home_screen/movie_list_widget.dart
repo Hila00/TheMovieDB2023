@@ -90,7 +90,9 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                             moviePosterUrl: movies[index].posterUrl,
                           ),
                         ),
-                        const FavoriteButton(),
+                        FavoriteButton(
+                          attachedMovie: movies[index],
+                        ),
                       ],
                     );
                   },

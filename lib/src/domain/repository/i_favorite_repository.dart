@@ -1,4 +1,9 @@
+import '../entity/movie.dart';
+
 abstract class IFavoriteRepository {
   void getData();
-  bool insertFavoriteMovie();
+
+  void insertFavoriteMovie(Movie movie);
+
+  void removeFavoriteMovie(int id);
 }

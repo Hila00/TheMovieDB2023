@@ -4,14 +4,14 @@ import '../../entity/movie.dart';
 import '../usecase_interface.dart';
 
 class FavoritesUseCase extends IUseCase<Future<DataState<List<Movie>>>> {
-  FavoriteRepository dbRepo;
+  FavoriteRepository favoriteMoviesRepository;
 
   FavoritesUseCase({
-    required this.dbRepo,
+    required this.favoriteMoviesRepository,
   });
 
   @override
-  Future<DataState<List<Movie>>> call() async {
-    return await dbRepo.getData();
+  Future<DataState<List<Movie>>> call([Movie? movie]) async {
+    return await favoriteMoviesRepository.getData();
   }
 }

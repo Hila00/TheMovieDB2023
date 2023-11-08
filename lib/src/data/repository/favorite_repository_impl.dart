@@ -29,8 +29,14 @@ class FavoriteRepository implements IFavoriteRepository {
   }
 
   @override
-  bool insertFavoriteMovie() {
-    // TODO: implement insertFavoriteMovie
-    throw UnimplementedError();
+  void insertFavoriteMovie(Movie movie) {
+    MovieDao movieDao = database.movieDao;
+    movieDao.insertMovie(movie);
+  }
+
+  @override
+  void removeFavoriteMovie(int id) {
+    MovieDao movieDao = database.movieDao;
+    movieDao.deleteMovieById(id);
   }
 }

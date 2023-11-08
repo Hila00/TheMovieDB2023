@@ -4,9 +4,11 @@ import '../../data/datasource/remote/api_movie_service.dart';
 import '../../data/repository/favorite_repository_impl.dart';
 import '../../data/repository/genre_repository_impl.dart';
 import '../../data/repository/movie_repository_impl.dart';
+import '../../domain/usecase/implementation/add_favorite_movie_use_case.dart';
 import '../../domain/usecase/implementation/favorite_movies_use_case.dart';
 import '../../domain/usecase/implementation/genres_use_case.dart';
 import '../../domain/usecase/implementation/movies_use_case.dart';
+import '../../domain/usecase/implementation/remove_favorite_movie_use_case.dart';
 import '../../presentation/bloc/favorites_bloc.dart';
 import '../../presentation/bloc/genres_bloc.dart';
 import '../../presentation/bloc/movies_bloc.dart';
@@ -21,6 +23,7 @@ class BlocSingletonDependencies {
   late GenresBloc genresBloc;
   late TrailersBloc trailersBloc;
   late FavoritesBloc favoritesBloc;
+  late FavoriteRepository favoriteMoviesRepository;
 
   Future<void> initialize() async {
     database = await $FloorAppDatabase
@@ -34,6 +37,7 @@ class BlocSingletonDependencies {
       categoryEndPoint: ApiConstants.upComingMoviesEndPoint,
     );
 
+    favoriteMoviesRepository = FavoriteRepository(database: database);
     moviesBloc = MoviesBloc(
       moviesUseCase: moviesUseCase,
     );
@@ -52,9 +56,13 @@ class BlocSingletonDependencies {
 
     favoritesBloc = FavoritesBloc(
       favoriteMoviesUseCase: FavoritesUseCase(
-        dbRepo: FavoriteRepository(
-          database: database,
-        ),
+        favoriteMoviesRepository: favoriteMoviesRepository,
+      ),
+      addFavoriteUseCase: AddFavoriteMovieUseCase(
+        favoriteMoviesRepository: favoriteMoviesRepository,
+      ),
+      removeFavoriteUseCase: RemoveFavoriteMovieUseCase(
+        favoriteMoviesRepository: favoriteMoviesRepository,
       ),
     );
   }

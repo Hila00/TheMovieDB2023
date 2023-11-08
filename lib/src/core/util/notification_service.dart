@@ -31,7 +31,7 @@ class NotificationService {
     );
   }
 
-  notificationDetails() {
+  NotificationDetails notificationDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'channelId',
@@ -52,7 +52,7 @@ class NotificationService {
       id,
       title,
       body,
-      await notificationDetails(),
+      notificationDetails(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/util/constants.dart';
+import '../../../core/util/categories.dart';
 import '../../../core/util/error_message_widget.dart';
 import '../../../domain/entity/app_event.dart';
 import '../../../domain/entity/movie.dart';
@@ -9,23 +9,23 @@ import '../../bloc/favorites_bloc.dart';
 import '../../view/app_movie_info_screen.dart';
 import '../app_circular_progress_indicator.dart';
 import '../home_screen/category_title.dart';
+import '../home_screen/favorites_button.dart';
 import '../home_screen/movie_card.dart';
 
 class FavoritesList extends StatefulWidget {
-  static const double containerHeightDefaultValue = 700;
+  static const double containerHeightDefaultValue = 400;
   static const double containerPadding = 10;
-  static const int gridViewCrossAxisCount = 2;
+  static const int gridViewCrossAxisCount = 1;
   static const double listTitleFontSizeDefaultValue = 40;
   static const double posterImageWidth = 220;
-  static const double posterImageHeight = 270;
+  static const double posterImageHeight = 300;
+  static const double sizedBoxHeight = 25;
   final double listTitleFontSize;
   final double containerHeight;
-  final String categoryTitle;
 
   const FavoritesList({
     this.containerHeight = containerHeightDefaultValue,
     this.listTitleFontSize = listTitleFontSizeDefaultValue,
-    required this.categoryTitle,
     super.key,
   });
 
@@ -41,8 +41,11 @@ class _FavoritesListState extends State<FavoritesList> {
     return Column(
       children: [
         CategoryTitle(
-          title: widget.categoryTitle,
+          title: Categories.favoriteMovies,
           titleFontSize: widget.listTitleFontSize,
+        ),
+        const SizedBox(
+          height: FavoritesList.sizedBoxHeight,
         ),
         StreamBuilder(
           stream: bloc.allFavoriteMovies,
@@ -54,55 +57,46 @@ class _FavoritesListState extends State<FavoritesList> {
               bloc.fetchFavoriteMovies();
             }
 
-            print(snapshot.data);
-
             if (snapshot.data?.status == Status.success) {
               List<Movie> movies = snapshot.data?.data;
-
-              return Column(
-                children: [
-                  Container(
-                    height: widget.containerHeight,
-                    color: const Color(AppConstants.appItemsBackgroundColor),
-                    padding:
-                        const EdgeInsets.all(FavoritesList.containerPadding),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: FavoritesList.gridViewCrossAxisCount,
-                      ),
-                      itemCount: movies.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (
-                        BuildContext context,
-                        int index,
-                      ) {
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        AppMovieInfo(
-                                      movie: movies[index],
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: MovieCard(
-                                moviePosterUrl: movies[index].posterUrl,
-                                imageWidth: FavoritesList.posterImageWidth,
-                                imageHeight: FavoritesList.posterImageHeight,
-                              ),
+              return SizedBox(
+                height: widget.containerHeight,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: FavoritesList.gridViewCrossAxisCount,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: movies.length,
+                  itemBuilder: (
+                    BuildContext context,
+                    int index,
+                  ) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => AppMovieInfo(
+                              movie: movies[index],
                             ),
-                          ],
+                          ),
                         );
                       },
-                    ),
-                  ),
-                ],
+                      child: Column(
+                        children: [
+                          MovieCard(
+                            moviePosterUrl: movies[index].posterUrl,
+                            imageWidth: FavoritesList.posterImageWidth,
+                            imageHeight: FavoritesList.posterImageHeight,
+                          ),
+                          FavoriteButton(
+                            attachedMovie: movies[index],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             } else if (snapshot.data?.status == Status.error ||
                 snapshot.data?.status == Status.empty) {

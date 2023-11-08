@@ -46,13 +46,11 @@ class _FavoriteMoviesScreenState extends State<FavoriteMoviesScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _refresh,
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: Column(
               children: [
                 AppHeader(),
-                FavoritesList(
-                  categoryTitle: 'Favorite movies',
-                ),
+                FavoritesList(),
               ],
             ),
           ),
