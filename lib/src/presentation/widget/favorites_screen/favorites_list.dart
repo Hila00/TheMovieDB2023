@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/util/categories.dart';
-import '../../../core/util/error_message_widget.dart';
 import '../../../domain/entity/app_event.dart';
 import '../../../domain/entity/movie.dart';
 import '../../bloc/favorites_bloc.dart';
@@ -11,9 +10,10 @@ import '../app_circular_progress_indicator.dart';
 import '../home_screen/category_title.dart';
 import '../home_screen/favorites_button.dart';
 import '../home_screen/movie_card.dart';
+import 'empty_favorite_movies_message.dart';
 
 class FavoritesList extends StatefulWidget {
-  static const double containerHeightDefaultValue = 400;
+  static const double containerHeightDefaultValue = 558;
   static const double containerPadding = 10;
   static const int gridViewCrossAxisCount = 1;
   static const double listTitleFontSizeDefaultValue = 40;
@@ -65,7 +65,6 @@ class _FavoritesListState extends State<FavoritesList> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: FavoritesList.gridViewCrossAxisCount,
                   ),
-                  scrollDirection: Axis.horizontal,
                   itemCount: movies.length,
                   itemBuilder: (
                     BuildContext context,
@@ -100,7 +99,7 @@ class _FavoritesListState extends State<FavoritesList> {
               );
             } else if (snapshot.data?.status == Status.error ||
                 snapshot.data?.status == Status.empty) {
-              return const ErrorMessage();
+              return const EmptyFavoriteList();
             } else {
               return Column(
                 children: [
